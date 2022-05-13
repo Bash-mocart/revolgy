@@ -21,3 +21,8 @@ terraform {
     }
   }
 }
+
+module "eks" {
+  source = "../terraform/module/eks/"
+}
+

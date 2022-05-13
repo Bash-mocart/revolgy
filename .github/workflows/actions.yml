@@ -102,11 +102,11 @@ jobs:
         terraform -chdir=./staging fmt -check 
 
     # validating the terraform code for any syntax error
-    - name: Terraform validate
-      id: validate
-      run: |
-          terraform -chdir=./production validate 
-          terraform -chdir=./staging validate
+    # - name: Terraform validate
+    #   id: validate
+    #   run: |
+    #       terraform -chdir=./production validate 
+    #       terraform -chdir=./staging validate
 
 
     # Generates an execution plan for Terraform
