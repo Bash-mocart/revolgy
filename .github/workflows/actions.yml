@@ -56,7 +56,7 @@ jobs:
       run:
         shell: bash
 
-     env:
+      env:
         DOCKER_REPOSITORY: bashox
         FRONTEND_IMAGE_NAME: revolgy-frontend
         BACKEND_IMAGE_NAME: revolgy-frontend
