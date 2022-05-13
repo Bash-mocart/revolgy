@@ -62,7 +62,7 @@ jobs:
       BACKEND_IMAGE_NAME: revolgy-frontend
       IMAGE_TAG: ${{ github.run_number }} # ${{ github.sha }}
       # AKS_RESOURCE_GROUP: rg-aks-cluster-tf-023
-      # EKS_NAME: aks-cluster
+      # EKS_NAME: aks-cluster 
       # ACR_NAME: acrforakstf023
       # TERRAFORM_VERSION: 1.1.9
       # WORKING_DIRECTORY: infra
@@ -99,14 +99,14 @@ jobs:
       id: format
       run: |
         terraform -chdir=./production fmt -check 
-        # terraform -chdir=./staging fmt -check 
+        terraform -chdir=./staging fmt -check 
 
     # validating the terraform code for any syntax error
     - name: Terraform validate
       id: validate
       run: |
           terraform -chdir=./production validate 
-          # terraform -chdir=./staging validate
+          terraform -chdir=./staging validate
 
 
     # Generates an execution plan for Terraform
@@ -182,7 +182,7 @@ jobs:
       #   AWS_REGION: ${{ secrets.AWS_REGION }}
       #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-      run: terraform apply -auto-approve
+      run: terraform apply -chdir=./production -auto-approve
 
   terratest:
     name: 'Terratest'
