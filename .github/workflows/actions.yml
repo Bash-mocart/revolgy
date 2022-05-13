@@ -56,16 +56,16 @@ jobs:
       run:
         shell: bash
 
-      env:
-        DOCKER_REPOSITORY: bashox
-        FRONTEND_IMAGE_NAME: revolgy-frontend
-        BACKEND_IMAGE_NAME: revolgy-frontend
-        IMAGE_TAG: ${{ github.run_number }} # ${{ github.sha }}
-        # AKS_RESOURCE_GROUP: rg-aks-cluster-tf-023
-        # EKS_NAME: aks-cluster
-        # ACR_NAME: acrforakstf023
-        # TERRAFORM_VERSION: 1.1.9
-        # WORKING_DIRECTORY: infra
+    env:
+      DOCKER_REPOSITORY: bashox
+      FRONTEND_IMAGE_NAME: revolgy-frontend
+      BACKEND_IMAGE_NAME: revolgy-frontend
+      IMAGE_TAG: ${{ github.run_number }} # ${{ github.sha }}
+      # AKS_RESOURCE_GROUP: rg-aks-cluster-tf-023
+      # EKS_NAME: aks-cluster
+      # ACR_NAME: acrforakstf023
+      # TERRAFORM_VERSION: 1.1.9
+      # WORKING_DIRECTORY: infra
 
     steps:
     # Checkout the repository to the GitHub Actions runner
