@@ -115,7 +115,7 @@ export class Table extends Component<Table.Props, Table.State> {
                     appstyle[this.state.showActiveEmployees ? 'is-active' : '']
                   }`}
                 >
-                  <a href="#" onClick={this.toggleTab}>
+                  <a href='#' onClick={this.toggleTab}>
                     Active
                   </a>
                 </li>

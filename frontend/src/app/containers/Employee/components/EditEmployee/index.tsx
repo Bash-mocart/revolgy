@@ -445,7 +445,7 @@ export class EditEmployee extends Component<
         ? this.props.actions.deactivateEmployee(employeeId)
         : this.props.actions.activateEmployee(employeeId),
     );
-  };
+  }
 
   containerStyle: React.CSSProperties = {
     textAlign: 'center',
@@ -453,11 +453,11 @@ export class EditEmployee extends Component<
 
   textStyle: React.CSSProperties = {
     fontFamily: 'Mukta, Helvetica, Roboto, Arial, sans-serif',
-  }
+  };
 
   goBackToEmployees = () => {
     this.props.history.push('/employees');
-  };
+  }
 
   thirdLevelBreadcrumb: React.CSSProperties = {
     cursor: 'default',

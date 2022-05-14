@@ -87,7 +87,7 @@ export class Navbar extends React.Component<Navbar.Props, Navbar.State> {
 
           <ul
             className={`${style.vertical} ${style.menu} ${style['accordion-menu']}`}
-            data-accordion=""
+            data-accordion=''
           >
             <li
               className={`${style['accordion-item']} ${style['is-active']}`}
