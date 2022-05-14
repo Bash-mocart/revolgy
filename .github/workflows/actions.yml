@@ -47,179 +47,179 @@ name: 'Terraform'
 on: [push, pull_request]
 
 jobs:
-  terraform:
-    name: 'Terraform'
-    runs-on: ubuntu-latest
+  # terraform:
+  #   name: 'Terraform'
+  #   runs-on: ubuntu-latest
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
+  #   # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
 
-    env:
-      DOCKER_REPOSITORY: bashox
-      FRONTEND_IMAGE_NAME: revolgy-frontend
-      BACKEND_IMAGE_NAME: revolgy-frontend
-      IMAGE_TAG: ${{ github.run_number }} # ${{ github.sha }}
-      # AKS_RESOURCE_GROUP: rg-aks-cluster-tf-023
-      # EKS_NAME: aks-cluster 
-      # ACR_NAME: acrforakstf023
-      # TERRAFORM_VERSION: 1.1.9
-      # WORKING_DIRECTORY: infra
+  #   env:
+  #     DOCKER_REPOSITORY: bashox
+  #     FRONTEND_IMAGE_NAME: revolgy-frontend
+  #     BACKEND_IMAGE_NAME: revolgy-frontend
+  #     IMAGE_TAG: ${{ github.run_number }} # ${{ github.sha }}
+  #     # AKS_RESOURCE_GROUP: rg-aks-cluster-tf-023
+  #     # EKS_NAME: aks-cluster 
+  #     # ACR_NAME: acrforakstf023
+  #     # TERRAFORM_VERSION: 1.1.9
+  #     # WORKING_DIRECTORY: infra
 
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
+  #   steps:
+  #   # Checkout the repository to the GitHub Actions runner
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION}}
+  #   - name: Configure AWS Credentials
+  #     uses: aws-actions/configure-aws-credentials@v1
+  #     with:
+  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       aws-region: ${{ secrets.AWS_REGION}}
 
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-        # terraform_wrapper: false
+  #   # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+  #   - name: Setup Terraform
+  #     uses: hashicorp/setup-terraform@v1
+  #     with:
+  #       cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+  #       # terraform_wrapper: false
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      id: init
-      run: |
-        terraform -chdir=./production init
-        terraform -chdir=./staging init
-
-
-    # Checks that all Terraform configuration files adhere to a canonical format
-    - name: Terraform Format
-      id: format
-      run: |
-        terraform -chdir=./production fmt -check 
-        terraform -chdir=./staging fmt -check 
-
-    # validating the terraform code for any syntax error
-    - name: Terraform validate
-      id: validate
-      run: |
-          terraform -chdir=./production validate 
-          terraform -chdir=./staging validate
+  #   # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+  #   - name: Terraform Init
+  #     id: init
+  #     run: |
+  #       terraform -chdir=./production init
+  #       terraform -chdir=./staging init
 
 
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      if: github.event_name == 'pull_request'
-      id: plan
-      run: terraform -chdir=./production plan -no-color 
+  #   # Checks that all Terraform configuration files adhere to a canonical format
+  #   - name: Terraform Format
+  #     id: format
+  #     run: |
+  #       terraform -chdir=./production fmt -check 
+  #       terraform -chdir=./staging fmt -check 
 
-    - name: Terraform Plan Status
-      if: steps.plan.outcome == 'failure'
-      run: exit 1
+  #   # validating the terraform code for any syntax error
+  #   - name: Terraform validate
+  #     id: validate
+  #     run: |
+  #         terraform -chdir=./production validate 
+  #         terraform -chdir=./staging validate
 
 
-    # # testing if the resources are properly tagged
-    # - name: Terraform terratest
-    #   if: github.event_name == 'pull_request'
-    #   uses: actions/setup-go@v3
+  #   # Generates an execution plan for Terraform
+  #   - name: Terraform Plan
+  #     if: github.event_name == 'pull_request'
+  #     id: plan
+  #     run: terraform -chdir=./production plan -no-color 
+
+  #   - name: Terraform Plan Status
+  #     if: steps.plan.outcome == 'failure'
+  #     run: exit 1
+
+
+  #   # # testing if the resources are properly tagged
+  #   # - name: Terraform terratest
+  #   #   if: github.event_name == 'pull_request'
+  #   #   uses: actions/setup-go@v3
       
 
-    # - name: Infra Testing
-    #   if: github.event_name == 'pull_request'
-    #   id: terratest 
-    #   # env:
-    #   #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #   #   AWS_REGION: ${{ secrets.AWS_REGION }}
-    #   #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #   run: |
-    #     go mod init github.com/Bash-mocart/terratestV1
-    #     go test -v
+  #   # - name: Infra Testing
+  #   #   if: github.event_name == 'pull_request'
+  #   #   id: terratest 
+  #   #   # env:
+  #   #   #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #   #   #   AWS_REGION: ${{ secrets.AWS_REGION }}
+  #   #   #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #   #   run: |
+  #   #     go mod init github.com/Bash-mocart/terratestV1
+  #   #     go test -v
       
-    # Add a comment to pull requests with results
-    - name: add-results-comment
-      id: comment
-      uses: actions/github-script@v6
-      if: github.event_name == 'pull_request'
-      env:
-        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+  #   # Add a comment to pull requests with results
+  #   - name: add-results-comment
+  #     id: comment
+  #     uses: actions/github-script@v6
+  #     if: github.event_name == 'pull_request'
+  #     env:
+  #       PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
       
 
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-          #### Terraform Format  🖌\`${{ steps.format.outcome }}\`
-          #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+  #     with:
+  #       github-token: ${{ secrets.GITHUB_TOKEN }}
+  #       script: |
+  #         const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+  #         #### Terraform Format  🖌\`${{ steps.format.outcome }}\`
+  #         #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+  #         #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
       
-          <details><summary>Show Plan Changes</summary>
+  #         <details><summary>Show Plan Changes</summary>
           
-          \`\`\`\n
-          ${process.env.PLAN}
-          \`\`\`
+  #         \`\`\`\n
+  #         ${process.env.PLAN}
+  #         \`\`\`
           
-          </details>
+  #         </details>
 
       
           
-          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+  #         *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
             
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: output
-          })
+  #         github.rest.issues.createComment({
+  #           issue_number: context.issue.number,
+  #           owner: context.repo.owner,
+  #           repo: context.repo.repo,
+  #           body: output
+  #         })
 
-      # On push to main, build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-    - name: Terraform Apply
-      # env:
-      #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #   AWS_REGION: ${{ secrets.AWS_REGION }}
-      #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-      run: terraform apply -auto-approve
+  #     # On push to main, build or change infrastructure according to Terraform configuration files
+  #     # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+  #   - name: Terraform Apply
+  #     # env:
+  #     #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     #   AWS_REGION: ${{ secrets.AWS_REGION }}
+  #     #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+  #     run: terraform -chdir=./production  apply -auto-approve
 
-  terratest:
-    name: 'Terratest'
-    runs-on: ubuntu-latest
-    needs: [terraform]
+  # terratest:
+  #   name: 'Terratest'
+  #   runs-on: ubuntu-latest
+  #   needs: [terraform]
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
+  #   # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
     
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      if: github.event_name == 'pull_request'
-      uses: actions/checkout@v3
+  #   steps:
+  #   # Checkout the repository to the GitHub Actions runner
+  #   - name: Checkout
+  #     if: github.event_name == 'pull_request'
+  #     uses: actions/checkout@v3
 
-     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      if: github.event_name == 'pull_request'
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-        terraform_wrapper: false ## setting it false because it gives terratest assertion, problem
+  #    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+  #   - name: Setup Terraform
+  #     if: github.event_name == 'pull_request'
+  #     uses: hashicorp/setup-terraform@v1
+  #     with:
+  #       cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+  #       terraform_wrapper: false ## setting it false because it gives terratest assertion, problem
   
 
-    - name: Terraform terratest
-      if: github.event_name == 'pull_request'
-      uses: actions/setup-go@v3
+  #   - name: Terraform terratest
+  #     if: github.event_name == 'pull_request'
+  #     uses: actions/setup-go@v3
       
-  # testing if the resources are properly tagged
-    - name: Infra Testing
-      if: github.event_name == 'pull_request'
-      id: terratest 
-      run: |
-        go mod init github.com/Bash-mocart/terratest
-        go mod tidy -go=1.16 && go mod tidy -go=1.17
-        go test -v -timeout 3000m
+  # # testing if the resources are properly tagged
+  #   - name: Infra Testing
+  #     if: github.event_name == 'pull_request'
+  #     id: terratest 
+  #     run: |
+  #       go mod init github.com/Bash-mocart/terratest
+  #       go mod tidy -go=1.16 && go mod tidy -go=1.17
+  #       go test -v -timeout 3000m
 
   lint-test-build:
     name: 'Lint. Test, Build'
@@ -284,18 +284,6 @@ jobs:
       run: |
           npm run format
     
-    # - name: scanning backend
-    #   working-directory: ./backend
-    #   run: |
-    #       # npm install
-    #       npm audit fix
-    
-    # - name: scanning frontend
-    #   working-directory: ./frontend
-    #   run: |
-    #       # npm install
-    #       npm audit fix
-    
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
     
@@ -345,40 +333,132 @@ jobs:
       run: |
         docker push ${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         docker push ${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+  
+
+  deploy-staging:
+    name: 'deploy-staging'
+    environment: staging
+    runs-on: ubuntu-latest
+    needs: [lint-test-build]
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+    
+    env:
+      DOCKER_REPOSITORY: bashox
+      FRONTEND_IMAGE_NAME: revolgy-frontend
+      BACKEND_IMAGE_NAME: revolgy-backend
+      IMAGE_TAG: ${{ github.run_number }}
+    
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      # if: github.event_name == 'pull_request'
+      uses: actions/checkout@v3
+
+    - name: setting up node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 13.8.0
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION}}
 
     
-
-
-
-      
-    
-    
-    
-    
-       
-       
-       
-       
-       
-
-     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
-      if: github.event_name == 'pull_request'
       uses: hashicorp/setup-terraform@v1
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-        terraform_wrapper: false ## setting it false because it gives terratest assertion, problem
-  
 
-    - name: Terraform terratest
-      if: github.event_name == 'pull_request'
-      uses: actions/setup-go@v3
-      
-  # testing if the resources are properly tagged
-    - name: Infra Testing
-      if: github.event_name == 'pull_request'
-      id: terratest 
+    - name: Terraform Init
+      id: init
       run: |
-        go mod init github.com/Bash-mocart/terratest
-        go mod tidy -go=1.16 && go mod tidy -go=1.17
-        go test -v -timeout 3000m
+        terraform -chdir=./staging init
+
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      id: format
+      run: |
+        terraform -chdir=./staging fmt -check 
+
+    # validating the terraform code for any syntax error
+    - name: Terraform validate
+      id: validate
+      run: | 
+          terraform -chdir=./staging validate
+    
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      run: terraform -chdir=./staging apply -auto-approve
+
+    - name: Deploying Application
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      run: aws eks update-kubeconfig --name ${{ env.CLUTER_NAME }}
+
+    - name: Installing ALB Controller
+      uses: robatwave/github-action-eksctl@0.1.2
+      run: |
+        eksctl utils associate-iam-oidc-provider \
+          --region ${{ secrets.AWS_REGION}} \
+          --cluster ${{ env.CLUTER_NAME }} \
+          --approve
+        curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.1/docs/install/iam_policy.json
+        aws iam create-policy \
+          --policy-name AWSLoadBalancerControllerIAMPolicy \
+          --policy-document file://iam-policy.json
+        eksctl create iamserviceaccount \
+          --cluster=${{ env.CLUTER_NAME }} \
+          --namespace=kube-system \
+          --name=aws-load-balancer-controller \
+          --attach-policy-arn=arn:aws:iam::${{ secrets.ACCOUNT_ID }}:policy/AWSLoadBalancerControllerIAMPolicy \
+          --override-existing-serviceaccounts \
+          --approve
+
+    - name: Installing helm alb
+      uses: vimeda/helm@v1.6.8
+      run: | 
+        helm repo add eks https://aws.github.io/eks-charts
+        kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
+        helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName={{ env.CLUSTER_NAME }} --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+
+    - name: deploying application
+      uses: vimeda/helm@v1.6.8
+      run: |
+          cd helm
+          helm install revolgy revolgy --set favoriteDrink=slurm
+  
+  deploy-prod:
+    name: 'deploy-production'
+    environment: production
+    runs-on: ubuntu-latest
+    needs: [deploy-staging]
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+    
+    env:
+      DOCKER_REPOSITORY: bashox
+      FRONTEND_IMAGE_NAME: revolgy-frontend
+      BACKEND_IMAGE_NAME: revolgy-backend
+      IMAGE_TAG: ${{ github.run_number }}
+    
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      # if: github.event_name == 'pull_request'
+      uses: actions/checkout@v3
+
+    - name: setting up node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 13.8.0
