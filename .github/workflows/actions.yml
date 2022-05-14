@@ -220,3 +220,197 @@ jobs:
         go mod init github.com/Bash-mocart/terratest
         go mod tidy -go=1.16 && go mod tidy -go=1.17
         go test -v -timeout 3000m
+
+  lint-test-build:
+    name: 'Lint. Test, Build'
+    runs-on: ubuntu-latest
+    needs: [terratest]
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+    
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      if: github.event_name == 'pull_request'
+      uses: actions/checkout@v3
+
+    - name: linting backend
+      working-directory: ./backend
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 13.8.0
+        cache: 'npm'
+    - run: |
+          npm install
+          npm run lint
+    
+    - name: linting frontend
+      working-directory: ./frontend
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 13.8.0
+        cache: 'npm'
+    - run: |
+          npm install
+          npm run lint
+
+    - name: testing frontend
+      working-directory: ./frontend
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 13.8.0
+        cache: 'npm'
+    - run: |
+          npm install
+          npm run test
+    
+    - name: testing backend
+      working-directory: ./backend
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 13.8.0
+        cache: 'npm'
+    - run: |
+          npm install
+          npm run test
+        
+    - name: formating frontend
+      working-directory: ./frontend
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 13.8.0
+        cache: 'npm'
+    - run: |
+          npm install
+          npm run format
+        
+    - name: formatting backend
+      working-directory: ./backend
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 13.8.0
+        cache: 'npm'
+    - run: |
+          npm install
+          npm run format
+
+
+    - name: scan backend
+      working-directory: ./backend
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 13.8.0
+        cache: 'npm'
+    - run: |
+          npm install
+          npm audit fix --force
+
+    - name: scan frontend
+      working-directory: ./frontend
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 13.8.0
+        cache: 'npm'
+    - run: |
+          npm install
+          npm audit fix --force
+    
+    - name: build frontend docker
+      working-directory: ./frontend
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 13.8.0
+        cache: 'npm'
+    - run: |
+          npm i
+          npm audit fix --force
+    
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    
+    - name: Build Docker Image frontend
+      working-directory: ./frontend
+      run:
+        docker build --tag ${{ FRONTEND_IMAGE_NAME }}:${{ IMAGE_TAG }} --no-cache .
+    
+    - name: Build Docker Image backend
+      working-directory: ./backend
+      run:
+        docker build --tag ${{ BACKEND_IMAGE_NAME }}:${{ IMAGE_TAG }} --no-cache .
+
+    - name: Run Trivy vulnerability scanner frontend
+      uses: aquasecurity/trivy-action@master
+      continue-on-error: true
+      with:
+        image-ref: 'docker.io/${{ FRONTEND_IMAGE_NAME }}:${{ IMAGE_TAG }}'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'MEDIUM,HIGH,CRITICAL'
+
+    
+    - name: Run Trivy vulnerability scanner backend
+      uses: aquasecurity/trivy-action@master
+      continue-on-error: true
+      with:
+        image-ref: 'docker.io/${{ BACKEND_IMAGE_NAME }}:${{ IMAGE_TAG }}'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'MEDIUM,HIGH,CRITICAL'
+    
+    - name: Push Image to Docker Hub
+      run: |
+        docker push ${{ BACKEND_IMAGE_NAME }}:${{ IMAGE_TAG }}
+        docker push ${{ FRONTEND_IMAGE_NAME }}:${{ IMAGE_TAG }}
+
+    
+
+
+
+      
+    
+    
+    
+    
+       
+       
+       
+       
+       
+
+     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      if: github.event_name == 'pull_request'
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        terraform_wrapper: false ## setting it false because it gives terratest assertion, problem
+  
+
+    - name: Terraform terratest
+      if: github.event_name == 'pull_request'
+      uses: actions/setup-go@v3
+      
+  # testing if the resources are properly tagged
+    - name: Infra Testing
+      if: github.event_name == 'pull_request'
+      id: terratest 
+      run: |
+        go mod init github.com/Bash-mocart/terratest
+        go mod tidy -go=1.16 && go mod tidy -go=1.17
+        go test -v -timeout 3000m
