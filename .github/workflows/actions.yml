@@ -224,7 +224,6 @@ jobs:
   lint-test-build:
     name: 'Lint. Test, Build'
     runs-on: ubuntu-latest
-    needs: [terratest]
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -453,7 +452,4 @@ jobs:
       # if: github.event_name == 'pull_request'
       uses: actions/checkout@v3
 
-    - name: setting up node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 13.8.0
+  
