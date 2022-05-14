@@ -247,7 +247,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 13.8.0
-        cache: 'npm'
+        
 
     - name: linting backend
       working-directory: ./backend
