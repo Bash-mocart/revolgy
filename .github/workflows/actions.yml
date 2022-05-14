@@ -234,12 +234,12 @@ jobs:
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      if: github.event_name == 'pull_request'
+      # if: github.event_name == 'pull_request'
       uses: actions/checkout@v3
 
     - name: linting backend
       working-directory: ./backend
-    - uses: actions/setup-node@v3
+      uses: actions/setup-node@v3
       with:
         node-version: 13.8.0
         cache: 'npm'
@@ -249,7 +249,7 @@ jobs:
     
     - name: linting frontend
       working-directory: ./frontend
-    - uses: actions/setup-node@v3
+      uses: actions/setup-node@v3
       with:
         node-version: 13.8.0
         cache: 'npm'
@@ -259,7 +259,7 @@ jobs:
 
     - name: testing frontend
       working-directory: ./frontend
-    - uses: actions/setup-node@v3
+      uses: actions/setup-node@v3
       with:
         node-version: 13.8.0
         cache: 'npm'
@@ -269,7 +269,7 @@ jobs:
     
     - name: testing backend
       working-directory: ./backend
-    - uses: actions/setup-node@v3
+      uses: actions/setup-node@v3
       with:
         node-version: 13.8.0
         cache: 'npm'
@@ -279,7 +279,7 @@ jobs:
         
     - name: formating frontend
       working-directory: ./frontend
-    - uses: actions/setup-node@v3
+      uses: actions/setup-node@v3
       with:
         node-version: 13.8.0
         cache: 'npm'
@@ -289,44 +289,13 @@ jobs:
         
     - name: formatting backend
       working-directory: ./backend
-    - uses: actions/setup-node@v3
+      uses: actions/setup-node@v3
       with:
         node-version: 13.8.0
         cache: 'npm'
     - run: |
           npm install
           npm run format
-
-
-    - name: scan backend
-      working-directory: ./backend
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 13.8.0
-        cache: 'npm'
-    - run: |
-          npm install
-          npm audit fix --force
-
-    - name: scan frontend
-      working-directory: ./frontend
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 13.8.0
-        cache: 'npm'
-    - run: |
-          npm install
-          npm audit fix --force
-    
-    - name: build frontend docker
-      working-directory: ./frontend
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 13.8.0
-        cache: 'npm'
-    - run: |
-          npm i
-          npm audit fix --force
     
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
