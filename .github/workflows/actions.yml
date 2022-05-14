@@ -243,9 +243,9 @@ jobs:
       with:
         node-version: 13.8.0
         cache: 'npm'
-    - run: |
-          npm install
-          npm run lint
+    - run: npm install
+    - run: npm run lint
+          # npm run lint
     
     - name: linting frontend
       working-directory: ./frontend
