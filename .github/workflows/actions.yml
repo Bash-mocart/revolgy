@@ -101,19 +101,19 @@ jobs:
         terraform -chdir=./production fmt -check 
         terraform -chdir=./staging fmt -check 
 
-    # validating the terraform code for any syntax error
-    # - name: Terraform validate
-    #   id: validate
-    #   run: |
-    #       terraform -chdir=./production validate 
-    #       terraform -chdir=./staging validate
+    validating the terraform code for any syntax error
+    - name: Terraform validate
+      id: validate
+      run: |
+          terraform -chdir=./production validate 
+          terraform -chdir=./staging validate
 
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       if: github.event_name == 'pull_request'
       id: plan
-      run: terraform -chdir=./production -var="db_password=${{ secrets.DB_PASSWORD }}" -var="db_username=${{ secrets.DB_USER }}" -no-color 
+      run: terraform -chdir=./production plan -no-color 
 
     - name: Terraform Plan Status
       if: steps.plan.outcome == 'failure'
@@ -181,7 +181,7 @@ jobs:
       #   AWS_REGION: ${{ secrets.AWS_REGION }}
       #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-      run: terraform apply -chdir=./production -var="db_password=${{ secrets.DB_PASSWORD }}" -var="db_username=${{ secrets.DB_USER }}" -auto-approve
+      run: terraform apply -auto-approve
 
   terratest:
     name: 'Terratest'

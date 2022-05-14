@@ -27,3 +27,11 @@ module "eks" {
   db_username = "test"
   db_password = "test12345"
 }
+
+variable "db_username" {
+  type = string
+}
+
+variable "db_password" {
+  type = string
+}

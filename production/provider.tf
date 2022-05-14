@@ -23,6 +23,15 @@ terraform {
 }
 
 module "eks" {
-  source = "../terraform/module/eks/"
+  source      = "../terraform/module/eks/"
+  db_username = var.db_username
+  db_password = var.db_password
 }
 
+variable "db_username" {
+  type = string
+}
+
+variable "db_password" {
+  type = string
+}
