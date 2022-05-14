@@ -397,8 +397,11 @@ jobs:
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       run: aws eks update-kubeconfig --name ${{ env.CLUTER_NAME }}
 
-    - name: Installing ALB Controller
+   
+    - name: Installing ALB Controller template
       uses: robatwave/github-action-eksctl@0.1.2
+
+    - name: Installing ALB Controller
       run: |
         eksctl utils associate-iam-oidc-provider \
           --region ${{ secrets.AWS_REGION}} \
@@ -416,15 +419,16 @@ jobs:
           --override-existing-serviceaccounts \
           --approve
 
-    - name: Installing helm alb
+    - name: Installing helm alb template
       uses: vimeda/helm@v1.6.8
+
+    - name: Installing helm alb
       run: | 
         helm repo add eks https://aws.github.io/eks-charts
         kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
         helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName={{ env.CLUSTER_NAME }} --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
-
+     
     - name: deploying application
-      uses: vimeda/helm@v1.6.8
       run: |
           cd helm
           helm install revolgy revolgy --set favoriteDrink=slurm
