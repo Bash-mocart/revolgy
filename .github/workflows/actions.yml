@@ -113,7 +113,7 @@ jobs:
     - name: Terraform Plan
       if: github.event_name == 'pull_request'
       id: plan
-      run: terraform -chdir=./production plan -no-color 
+      run: terraform -chdir=./production -var="db_password=${{ secrets.DB_PASSWORD }}" -var="db_username=${{ secrets.DB_USER }}" -no-color 
 
     - name: Terraform Plan Status
       if: steps.plan.outcome == 'failure'
@@ -152,7 +152,6 @@ jobs:
           const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
           #### Terraform Format  🖌\`${{ steps.format.outcome }}\`
           #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-          #### Terraform Infratest 🤖\`${{ steps.terratest.outcome }}\`
           #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
       
           <details><summary>Show Plan Changes</summary>
