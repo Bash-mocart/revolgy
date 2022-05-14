@@ -241,7 +241,7 @@ jobs:
       working-directory: ./backend
       uses: actions/setup-node@v3
       with:
-        node-version: 13.8.0
+        node-version: 14.19.2
         cache: 'npm'
     - run: npm install
     - run: npm run lint
@@ -251,7 +251,7 @@ jobs:
       working-directory: ./frontend
       uses: actions/setup-node@v3
       with:
-        node-version: 13.8.0
+        node-version: 14.19.2
         cache: 'npm'
     - run: |
           npm install
