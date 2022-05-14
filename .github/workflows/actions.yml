@@ -237,25 +237,26 @@ jobs:
       # if: github.event_name == 'pull_request'
       uses: actions/checkout@v3
 
-    - name: linting backend
+    - name: setting up node
       working-directory: ./backend
       uses: actions/setup-node@v3
       with:
-        node-version: 14.19.2
+        node-version: 13.8.0
         cache: 'npm'
-    - run: npm install
-    - run: npm run lint
-          # npm run lint
-    
-    - name: linting frontend
-      working-directory: ./frontend
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14.19.2
-        cache: 'npm'
-    - run: |
+
+    - name: linting backend
+      working-directory: ./backend
+      run: |
           npm install
           npm run lint
+          
+    - name: linting frontend
+      working-directory: ./frontend
+      run: |
+          npm install
+          npm run lint
+   
+ 
 
     - name: testing frontend
       working-directory: ./frontend
