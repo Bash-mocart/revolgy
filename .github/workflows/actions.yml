@@ -140,6 +140,7 @@ jobs:
     # Add a comment to pull requests with results
     - name: add-results-comment
       id: comment
+      permissions: write-all
       uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
       env:
