@@ -305,18 +305,18 @@ jobs:
     - name: Build Docker Image frontend
       working-directory: ./frontend
       run:
-        docker build --tag ${{ FRONTEND_IMAGE_NAME }}:${{ IMAGE_TAG }} --no-cache .
+        docker build --tag ${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} --no-cache .
     
     - name: Build Docker Image backend
       working-directory: ./backend
       run:
-        docker build --tag ${{ BACKEND_IMAGE_NAME }}:${{ IMAGE_TAG }} --no-cache .
+        docker build --tag ${{ env.BACKEND_IMAGE_NAME }}:${{ env.MAGE_TAG }} --no-cache .
 
     - name: Run Trivy vulnerability scanner frontend
       uses: aquasecurity/trivy-action@master
       continue-on-error: true
       with:
-        image-ref: 'docker.io/${{ FRONTEND_IMAGE_NAME }}:${{ IMAGE_TAG }}'
+        image-ref: 'docker.io/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
         format: 'table'
         exit-code: '1'
         ignore-unfixed: true
@@ -328,7 +328,7 @@ jobs:
       uses: aquasecurity/trivy-action@master
       continue-on-error: true
       with:
-        image-ref: 'docker.io/${{ BACKEND_IMAGE_NAME }}:${{ IMAGE_TAG }}'
+        image-ref: 'docker.io/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
         format: 'table'
         exit-code: '1'
         ignore-unfixed: true
@@ -337,8 +337,8 @@ jobs:
     
     - name: Push Image to Docker Hub
       run: |
-        docker push ${{ BACKEND_IMAGE_NAME }}:${{ IMAGE_TAG }}
-        docker push ${{ FRONTEND_IMAGE_NAME }}:${{ IMAGE_TAG }}
+        docker push ${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        docker push ${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
     
 
