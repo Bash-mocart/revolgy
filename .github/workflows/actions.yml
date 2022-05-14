@@ -265,39 +265,39 @@ jobs:
     - name: testing backend
       working-directory: ./backend
       run: |
-          npm install
+          # npm install
           npm run test
         
     
     - name: testing frontend
       working-directory: ./frontend
       run: |
-          npm install
+          # npm install
           npm run test
 
     - name: formatting frontend
       working-directory: ./frontend
       run: |
-          npm install
+          # npm install
           npm run format
     
        
     - name: format backend
       working-directory: ./backend
       run: |
-          npm install
+          # npm install
           npm run format
     
     - name: scanning backend
       working-directory: ./backend
       run: |
-          npm install
+          # npm install
           npm audit fix
     
     - name: scanning frontend
       working-directory: ./frontend
       run: |
-          npm install
+          # npm install
           npm audit fix
     
     - name: Set up QEMU
@@ -320,7 +320,7 @@ jobs:
     - name: Build Docker Image backend
       working-directory: ./backend
       run:
-        docker build --tag ${{ env.BACKEND_IMAGE_NAME }}:${{ env.MAGE_TAG }} --no-cache .
+        docker build --tag ${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} --no-cache .
 
     - name: Run Trivy vulnerability scanner frontend
       uses: aquasecurity/trivy-action@master
