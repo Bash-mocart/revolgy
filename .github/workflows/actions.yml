@@ -265,40 +265,36 @@ jobs:
     - name: testing backend
       working-directory: ./backend
       run: |
-          # npm install
           npm run test
         
     
     - name: testing frontend
       working-directory: ./frontend
       run: |
-          # npm install
           npm run test
 
     - name: formatting frontend
       working-directory: ./frontend
       run: |
-          # npm install
           npm run format
     
        
     - name: format backend
       working-directory: ./backend
       run: |
-          # npm install
           npm run format
     
-    - name: scanning backend
-      working-directory: ./backend
-      run: |
-          # npm install
-          npm audit fix
+    # - name: scanning backend
+    #   working-directory: ./backend
+    #   run: |
+    #       # npm install
+    #       npm audit fix
     
-    - name: scanning frontend
-      working-directory: ./frontend
-      run: |
-          # npm install
-          npm audit fix
+    # - name: scanning frontend
+    #   working-directory: ./frontend
+    #   run: |
+    #       # npm install
+    #       npm audit fix
     
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
