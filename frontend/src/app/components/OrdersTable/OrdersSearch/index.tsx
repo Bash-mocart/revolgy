@@ -84,9 +84,9 @@ export class OrdersSearch extends Component<
         </label>
         <input
           disabled={this.props.isFetching}
-          type="text"
+          type='text'
           value={this.state.searchText}
-          title="Search Orders"
+          title='Search Orders'
           placeholder={this.props.placeholder}
           onChange={this.onSearchChange}
           onKeyDown={this.handleKeyDown}

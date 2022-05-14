@@ -143,7 +143,7 @@ export class EditEmployee extends Component<
       salaryType: SalaryType.YEARLY,
       effectiveDate: new Date(),
     });
-  };
+  }
 
   processInputChange = (
     statePayload: Partial<EditEmployee.State>,
@@ -161,7 +161,7 @@ export class EditEmployee extends Component<
 
     this.props.debounce(Object.keys(statePayload)[0], debounceCallback);
     this.setState({ ...this.state, ...statePayload });
-  };
+  }
 
   handleDisplayNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -178,7 +178,7 @@ export class EditEmployee extends Component<
       !isInputEmpty(value),
       `Display Name field is required`,
     );
-  };
+  }
 
   handleFirstNameChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const { middleName, lastName, secondLastName } = this.state;
@@ -196,7 +196,7 @@ export class EditEmployee extends Component<
       !isInputEmpty(target.value),
       `First name field is required`,
     );
-  };
+  }
 
   handleMiddleNameChange = ({
     target,
@@ -214,7 +214,7 @@ export class EditEmployee extends Component<
       { middleName: target.value },
       requestExecutionCallback,
     );
-  };
+  }
 
   handleLastNameChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const { firstName, middleName, secondLastName } = this.state;
@@ -233,7 +233,7 @@ export class EditEmployee extends Component<
       !isInputEmpty(value),
       `Last name field is required`,
     );
-  };
+  }
 
   handleSecondLastNameChange = ({
     target,
@@ -252,7 +252,7 @@ export class EditEmployee extends Component<
       { secondLastName: target.value },
       requestExecutionCallback,
     );
-  };
+  }
 
   handleSalaryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -271,7 +271,7 @@ export class EditEmployee extends Component<
       isInputGreaterThanOrEqualMinValue(salaryValue, salaryMinValue),
       `Salary must be greater than or equal to ${salaryMinValue}`,
     );
-  };
+  }
 
   handleCompanyEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -288,7 +288,7 @@ export class EditEmployee extends Component<
       !isInputEmpty(value) && doesInputMatchesEmailPattern(value),
       `Company email is invalid`,
     );
-  };
+  }
 
   handlePersonalEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -305,7 +305,7 @@ export class EditEmployee extends Component<
       isInputEmpty(value) || doesInputMatchesEmailPattern(value),
       `Personal email is invalid`,
     );
-  };
+  }
 
   handlePhoneNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -317,7 +317,7 @@ export class EditEmployee extends Component<
       );
 
     this.processInputChange({ phoneNumber: value }, requestExecutionCallback);
-  };
+  }
 
   handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -336,7 +336,7 @@ export class EditEmployee extends Component<
       !isInputEmpty(value),
       `City is invalid`,
     );
-  };
+  }
 
   selectCountry = (val: React.ChangeEvent<string>) => {
     const country = (val as unknown) as string;
@@ -355,7 +355,7 @@ export class EditEmployee extends Component<
       !isInputEmpty(country),
       `Country is invalid`,
     );
-  };
+  }
 
   selectRegion = (val: React.ChangeEvent<string>) => {
     const region = (val as unknown) as string;
@@ -373,7 +373,7 @@ export class EditEmployee extends Component<
       !isInputEmpty(region),
       `Region is invalid`,
     );
-  };
+  }
 
   handleAddressLineChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = event.target;
@@ -387,7 +387,7 @@ export class EditEmployee extends Component<
       });
 
     this.processInputChange({ address: value }, requestExecutionCallback);
-  };
+  }
 
   handleBirthdateChanged = (date: Date | null) => {
     const birthdate = date || new Date();
@@ -398,7 +398,7 @@ export class EditEmployee extends Component<
         'birthdate',
       ),
     );
-  };
+  }
 
   handleEffectiveDateChanged = (date: Date | null) => {
     const effectiveDate = date || new Date();
@@ -413,7 +413,7 @@ export class EditEmployee extends Component<
       !isInputEmpty(effectiveDate.toString()),
       `Effective Date is invalid`,
     );
-  };
+  }
 
   handleTagsChange = (newTags: Array<any>) => {
     this.processInputChange({ tags: newTags }, () =>
@@ -423,7 +423,7 @@ export class EditEmployee extends Component<
         'tags',
       ),
     );
-  };
+  }
 
   handleSearch = (searchText: string) => {};
 
@@ -436,7 +436,7 @@ export class EditEmployee extends Component<
         'salaryType',
       ),
     );
-  };
+  }
 
   statusOnChange = () => {
     const { employeeId, isActive } = this.state;
@@ -453,7 +453,7 @@ export class EditEmployee extends Component<
 
   textStyle: React.CSSProperties = {
     fontFamily: 'Mukta, Helvetica, Roboto, Arial, sans-serif',
-  };
+  }
 
   goBackToEmployees = () => {
     this.props.history.push('/employees');
@@ -472,8 +472,8 @@ export class EditEmployee extends Component<
         isFetching={isFetching}
         searchText={searchText}
         onSearchChange={this.handleSearch}
-        placeholder="Search in the app"
-        title="General Search"
+        placeholder='Search in the app'
+        title='General Search'
       />
     );
 
@@ -501,7 +501,7 @@ export class EditEmployee extends Component<
           className={`${style['g-content']} ${style['grid-container']} ${style.fluid}`}
           style={this.textStyle}
         >
-          <form autoComplete="off">
+          <form autoComplete='off'>
             <div
               className={`${style['g-main']} ${style['grid-x']} ${style['grid-margin-x']}`}
             >
@@ -520,25 +520,25 @@ export class EditEmployee extends Component<
                   value={this.state.tags}
                   onChange={this.handleTagsChange}
                 />
-                <small className="medium-gray">Press tab to create tags.</small>
+                <small className='medium-gray'>Press tab to create tags.</small>
               </div>
 
               <div
                 className={`${style.cell} ${style['medium-6']} ${style['large-6']}`}
               >
                 <div className={style['input-cell']}>
-                  <label htmlFor="displayname" className={style.required}>
+                  <label htmlFor='displayname' className={style.required}>
                     Display Name
                   </label>
                   <input
-                    type="text"
-                    name="displayName"
-                    id="displayname"
+                    type='text'
+                    name='displayName'
+                    id='displayname'
                     value={this.state.displayName}
                     onChange={this.handleDisplayNameChange}
                     maxLength={50}
-                    className="largeinput"
-                    placeholder="Display Name"
+                    className='largeinput'
+                    placeholder='Display Name'
                     required
                   />
                 </div>
@@ -547,13 +547,13 @@ export class EditEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="firstname" className={style.required}>
+                      <label htmlFor='firstname' className={style.required}>
                         First Name
                       </label>
                       <input
-                        type="text"
-                        name="firstName"
-                        id="firstname"
+                        type='text'
+                        name='firstName'
+                        id='firstname'
                         value={this.state.firstName}
                         onChange={this.handleFirstNameChange}
                         required
@@ -566,11 +566,11 @@ export class EditEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="middlename">Middle name</label>
+                      <label htmlFor='middlename'>Middle name</label>
                       <input
-                        type="text"
-                        name="middleName"
-                        id="middlename"
+                        type='text'
+                        name='middleName'
+                        id='middlename'
                         value={this.state.middleName}
                         onChange={this.handleMiddleNameChange}
                         maxLength={50}
@@ -584,13 +584,13 @@ export class EditEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="lastname" className={style.required}>
+                      <label htmlFor='lastname' className={style.required}>
                         Last Name
                       </label>
                       <input
-                        type="text"
-                        name="lastName"
-                        id="lastname"
+                        type='text'
+                        name='lastName'
+                        id='lastname'
                         value={this.state.lastName}
                         onChange={this.handleLastNameChange}
                         required
@@ -602,11 +602,11 @@ export class EditEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="secondlastname">Second Last Name</label>
+                      <label htmlFor='secondlastname'>Second Last Name</label>
                       <input
-                        type="text"
-                        name="secondLastName"
-                        id="secondlastname"
+                        type='text'
+                        name='secondLastName'
+                        id='secondlastname'
                         value={this.state.secondLastName}
                         onChange={this.handleSecondLastNameChange}
                         maxLength={50}
@@ -618,17 +618,17 @@ export class EditEmployee extends Component<
                 <h5 style={this.textStyle}>Salary</h5>
                 <div className={style['input-cell']}>
                   <input
-                    type="radio"
+                    type='radio'
                     value={SalaryType.YEARLY}
-                    name="yearlySalary"
+                    name='yearlySalary'
                     checked={this.state.salaryType === SalaryType.YEARLY}
                     onChange={this.handleSalaryTypeChange}
                   />
                   <label>Yearly</label>
                   <input
-                    type="radio"
+                    type='radio'
                     value={SalaryType.HOURLY}
-                    name="hourlySalary"
+                    name='hourlySalary'
                     checked={this.state.salaryType === SalaryType.HOURLY}
                     onChange={this.handleSalaryTypeChange}
                   />
@@ -639,19 +639,19 @@ export class EditEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="salary" className={style.required}>
+                      <label htmlFor='salary' className={style.required}>
                         Set amount
                       </label>
                       <div className={style['input-group']}>
                         <span className={style['input-group-label']}>$</span>
                         <input
-                          type="number"
-                          name="salary"
-                          id="salary"
+                          type='number'
+                          name='salary'
+                          id='salary'
                           value={this.state.salary}
                           onChange={this.handleSalaryChange}
-                          min="0.01"
-                          step="0.01"
+                          min='0.01'
+                          step='0.01'
                         />
                         <label className={style['medium-gray']}>
                           {this.state.salaryType === SalaryType.HOURLY
@@ -665,12 +665,12 @@ export class EditEmployee extends Component<
                   <div
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
-                    <label htmlFor="effectiveDate" className={style.required}>
+                    <label htmlFor='effectiveDate' className={style.required}>
                       Effective Date
                     </label>
                     <DatePicker
-                      name="effectiveDate"
-                      id="effectiveDate"
+                      name='effectiveDate'
+                      id='effectiveDate'
                       selected={this.state.effectiveDate}
                       onChange={this.handleEffectiveDateChanged}
                       required
@@ -683,19 +683,19 @@ export class EditEmployee extends Component<
                   className={`${style.cell} ${style['medium-8']} ${style['large-6']}`}
                 >
                   <div className={style['input-cell']}>
-                    <label htmlFor="email" className={style.required}>
+                    <label htmlFor='email' className={style.required}>
                       Email
                     </label>
                     <input
-                      type="email"
-                      name="companyEmail"
-                      id="email"
+                      type='email'
+                      name='companyEmail'
+                      id='email'
                       value={this.state.companyEmail}
                       onChange={this.handleCompanyEmailChange}
                       required
                       maxLength={50}
-                      placeholder="Organization email address"
-                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                      placeholder='Organization email address'
+                      pattern='[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$'
                     />
                   </div>
                 </div>
@@ -704,16 +704,16 @@ export class EditEmployee extends Component<
                   className={`${style.cell} ${style['medium-8']} ${style['large-6']}`}
                 >
                   <div className={style['input-cell']}>
-                    <label htmlFor="personalEmail">Personal email</label>
+                    <label htmlFor='personalEmail'>Personal email</label>
                     <input
-                      type="email"
-                      name="personalEmail"
-                      id="personalemail"
+                      type='email'
+                      name='personalEmail'
+                      id='personalemail'
                       value={this.state.personalEmail}
                       onChange={this.handlePersonalEmailChange}
                       maxLength={50}
-                      placeholder="Personal/Alternative email address"
-                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                      placeholder='Personal/Alternative email address'
+                      pattern='[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$'
                     />
                   </div>
                 </div>
@@ -722,15 +722,15 @@ export class EditEmployee extends Component<
                   className={`${style.cell} ${style['medium-8']} ${style['large-6']}`}
                 >
                   <div className={style['input-cell']}>
-                    <label htmlFor="phoneNumber">Phone number</label>
+                    <label htmlFor='phoneNumber'>Phone number</label>
                     <input
-                      type="tel"
-                      name="phoneNumber"
-                      id="phonenumber"
+                      type='tel'
+                      name='phoneNumber'
+                      id='phonenumber'
                       value={this.state.phoneNumber}
                       onChange={this.handlePhoneNumberChange}
                       maxLength={50}
-                      placeholder="Enter a valid phone number"
+                      placeholder='Enter a valid phone number'
                     />
                   </div>
                 </div>
@@ -739,10 +739,10 @@ export class EditEmployee extends Component<
                   className={`${style.cell} ${style['small-12']} ${style['medium-8']} ${style['large-4']}`}
                 >
                   <div className={style['input-cell']}>
-                    <label htmlFor="birthdate">Birthday</label>
+                    <label htmlFor='birthdate'>Birthday</label>
                     <DatePicker
-                      name="birthdate"
-                      id="birthdate"
+                      name='birthdate'
+                      id='birthdate'
                       selected={this.state.birthdate}
                       onChange={this.handleBirthdateChanged}
                     />
@@ -752,10 +752,10 @@ export class EditEmployee extends Component<
                 <div
                   className={`${style.cell} ${style['small-12']} ${style['medium-8']} ${style['large-9']}`}
                 >
-                  <label htmlFor="addressLine">Address line</label>
+                  <label htmlFor='addressLine'>Address line</label>
                   <textarea
-                    name="addressLine"
-                    id="addressline"
+                    name='addressLine'
+                    id='addressline'
                     value={this.state.address}
                     onChange={this.handleAddressLineChange}
                     maxLength={200}
@@ -768,7 +768,7 @@ export class EditEmployee extends Component<
                       className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                     >
                       <div className={style['input-cell']}>
-                        <label className={style.required} htmlFor="country">
+                        <label className={style.required} htmlFor='country'>
                           Country
                         </label>
                         <CountryDropdown
@@ -782,7 +782,7 @@ export class EditEmployee extends Component<
                       className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                     >
                       <div className={style['input-cell']}>
-                        <label className={style.required} htmlFor="region">
+                        <label className={style.required} htmlFor='region'>
                           State/Province
                         </label>
                         <RegionDropdown
@@ -799,13 +799,13 @@ export class EditEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label className={style.required} htmlFor="city">
+                      <label className={style.required} htmlFor='city'>
                         City
                       </label>
                       <input
-                        type="text"
-                        name="city"
-                        id="city"
+                        type='text'
+                        name='city'
+                        id='city'
                         value={this.state.city}
                         onChange={this.handleCityChange}
                         maxLength={50}
@@ -819,7 +819,7 @@ export class EditEmployee extends Component<
                 className={`${style.cell} ${style['medium-2']} ${style['large-3']}`}
               >
                 <div className={style['e-emp-status']}>
-                  <label htmlFor="displayname">Employee Status</label>
+                  <label htmlFor='displayname'>Employee Status</label>
                   <div
                     className={`${style['e-status-mark']} ${
                       !this.state.isActive ? style.disabled : style.active

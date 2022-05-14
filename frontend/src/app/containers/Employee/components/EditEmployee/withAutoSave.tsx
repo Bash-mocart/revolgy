@@ -12,7 +12,7 @@ export const withAutoSave = (Component: React.ComponentClass<any>) => {
         inputName,
         window.setTimeout(callback, this.coolDown),
       );
-    };
+    }
 
     render() {
       return <Component {...this.props} debounce={this.debounce} />;

@@ -48,15 +48,15 @@ export class EmployeesService {
       `${this.employeesUrl}/${id}/${fieldName}`,
       payloadReady,
     );
-  };
+  }
 
   updateAddress = (id: string, payload: EmployeeUpdateAddressModel) => {
     return this.httpService.put(`${this.employeesUrl}/${id}/address`, payload);
-  };
+  }
 
   updateNames = (id: string, payload: EmployeeUpdateNamesModel) => {
     return this.httpService.put(`${this.employeesUrl}/${id}/names`, payload);
-  };
+  }
 
   async deactivateEmployee(employeeId: string) {
     return this.httpService.put(

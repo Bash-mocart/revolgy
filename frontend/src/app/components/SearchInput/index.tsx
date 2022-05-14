@@ -62,7 +62,7 @@ export class SearchInput extends Component<
         }
       }, 500),
     });
-  };
+  }
 
   handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const { searchText, typingTimeout } = this.state;
@@ -72,7 +72,7 @@ export class SearchInput extends Component<
 
       this.props.onSearchChange(searchText);
     }
-  };
+  }
 
   render() {
     if (!shouldRender('SearchInput')) return null;
@@ -84,7 +84,7 @@ export class SearchInput extends Component<
         </label>
         <input
           disabled={this.props.isFetching}
-          type="text"
+          type='text'
           value={this.state.searchText}
           title={this.props.title}
           placeholder={this.props.placeholder}
