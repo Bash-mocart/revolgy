@@ -10,14 +10,14 @@ COPY ./ .
 
 RUN  npm run build:prod
   
-FROM node:13.8.0-alpine
+FROM nginx:alpine
 
-RUN npm install http-server -g
-
-WORKDIR /app/dist/
-
+WORKDIR /usr/share/nginx/html
+# Remove default nginx static assets
+RUN rm -rf ./*
+# Copy static assets from builder stage
 COPY --from=build /app/dist .
 
-EXPOSE 8080
-
-CMD ["http-server"]
+EXPOSE 80
+# Containers run nginx with global directives and daemon off
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
