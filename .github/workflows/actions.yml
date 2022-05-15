@@ -350,6 +350,7 @@ jobs:
       FRONTEND_IMAGE_NAME: revolgy-frontend
       BACKEND_IMAGE_NAME: revolgy-backend
       IMAGE_TAG: ${{ github.run_number }}
+      CLUSTER_NAME: eks
     
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -393,7 +394,7 @@ jobs:
       run: terraform -chdir=./staging apply -auto-approve
 
     - name: Deploying Application
-      run: aws eks update-kubeconfig --name ${{ env.CLUTER_NAME }}
+      run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
 
     - name: Eksctl tool installer
       run: |
