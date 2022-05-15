@@ -402,11 +402,12 @@ jobs:
     - name: Deploying Application
       run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
 
-    - name: Eksctl tool installer
+    
+    
+    - name: Eksctl, kubectl, helm tool installer
       run: |
-          curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-          sudo mv /tmp/eksctl /usr/local/bin
-          eksctl version
+          chmod +x ./install-helm-eksctl-kubectl.sh
+          ./install-helm-eksctl-kubectl.sh
 
     - name: Installing ALB Controller
       continue-on-error: true
@@ -427,23 +428,11 @@ jobs:
           --override-existing-serviceaccounts \
           --approve
 
-    - name: Installing helm and kubectl cli
-      run: |
-          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-          chmod 700 get_helm.sh
-          ./get_helm.sh
-
-          curl --silent --location -o /usr/local/bin/kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl
-          sudo chmod +x /usr/local/bin/kubectl
-          mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
-          kubectl version --client
-
-    - name: Installing helm alb
+    - name: Installing alb, prometheus, grafana
       run: | 
-        helm repo add eks https://aws.github.io/eks-charts
-        kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
-        helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=${{ env.CLUSTER_NAME }} --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
-     
+          chmod +x ./install-alb-prom-graf.sh
+          ./install-alb-prom-graf.sh
+
     - name: deploying application
       run: |
           echo starting
@@ -451,7 +440,7 @@ jobs:
           echo yes 
           echo $DNS_NAME
           cd helm
-          helm install revolgy revolgy \
+          helm upgrade -i revolgy revolgy \
             --set database.DNS=$DNS_NAME \
             --set frontend.containerImage=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
             --set backend.container.Image=${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
@@ -462,7 +451,6 @@ jobs:
             --set backend.container.TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
             --set backend.container.TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
             --set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} 
-
 
   deploy-prod:
     name: 'deploy-production'
@@ -486,5 +474,29 @@ jobs:
     - name: Checkout
       # if: github.event_name == 'pull_request'
       uses: actions/checkout@v3
+
+    - name: Eksctl, kubectl, helm tool installer
+      run: |
+          chmod +x ./install-helm-eksctl-kubectl.sh
+          ./install-helm-eksctl-kubectl.sh
+    
+    - name: deploying application
+      run: |
+          echo starting
+          export DNS_NAME=$(terraform -chdir=./production output -raw postgresdns)
+          echo yes 
+          echo $DNS_NAME
+          cd helm
+          helm upgrade -i revolgy revolgy \
+            --set database.DNS=$DNS_NAME \
+            --set frontend.containerImage=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+            --set backend.container.Image=${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+            --set backend.container.TYPEORM_CONNECTION=${{ secrets.TYPEORM_CONNECTION }} \
+            --set backend.container.TYPEORM_MIGRATIONS_DIR=${{ secrets.TYPEORM_MIGRATIONS_DIR }} \
+            --set backend.container.TYPEORM_MIGRATIONS=${{ secrets.TYPEORM_MIGRATIONS }} \
+            --set backend.container.TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} \
+            --set backend.container.TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
+            --set backend.container.TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
+            --set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} 
 
   
