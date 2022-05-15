@@ -405,6 +405,7 @@ jobs:
           eksctl version
 
     - name: Installing ALB Controller
+      continue-on-error: true
       run: |
         eksctl utils associate-iam-oidc-provider \
           --region ${{ secrets.AWS_REGION}} \
@@ -422,8 +423,16 @@ jobs:
           --override-existing-serviceaccounts \
           --approve
 
-    - name: Installing helm alb template
-      uses: vimeda/helm@v1.6.8
+    - name: Installing helm and kubectl cli
+      run: |
+           curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+           chmod 700 get_helm.sh
+          ./get_helm.sh
+
+          curl --silent --location -o /usr/local/bin/kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl
+          chmod +x /usr/local/bin/kubectl
+          mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+          kubectl version --client
 
     - name: Installing helm alb
       run: | 
@@ -445,8 +454,8 @@ jobs:
           -- set backend.container.TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
           -- set backend.container.TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
           -- set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} \
-          
-            
+
+
   deploy-prod:
     name: 'deploy-production'
     environment: production
