@@ -391,7 +391,9 @@ jobs:
           terraform -chdir=./staging validate
     
     - name: Terraform Apply
-      run: terraform -chdir=./staging apply -auto-approve
+      run: |
+          terraform -chdir=./staging apply -auto-approve
+          export DNS_NAME=$(terraform output --raw postgresdns)
 
     - name: Deploying Application
       run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
@@ -406,14 +408,14 @@ jobs:
       run: |
         eksctl utils associate-iam-oidc-provider \
           --region ${{ secrets.AWS_REGION}} \
-          --cluster ${{ env.CLUTER_NAME }} \
+          --cluster ${{ env.CLUSTER_NAME }} \
           --approve
         curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.1/docs/install/iam_policy.json
         aws iam create-policy \
           --policy-name AWSLoadBalancerControllerIAMPolicy \
           --policy-document file://iam-policy.json
         eksctl create iamserviceaccount \
-          --cluster=${{ env.CLUTER_NAME }} \
+          --cluster=${{ env.CLUSTER_NAME }} \
           --namespace=kube-system \
           --name=aws-load-balancer-controller \
           --attach-policy-arn=arn:aws:iam::${{ secrets.ACCOUNT_ID }}:policy/AWSLoadBalancerControllerIAMPolicy \
@@ -432,7 +434,22 @@ jobs:
     - name: deploying application
       run: |
           cd helm
-          helm install revolgy revolgy --set favoriteDrink=slurm
+          helm upgrade -i revolgy revolgy --set database.DNS=$DNS_NAME \
+          -- set frontend.containerImage=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+          -- set backend.container.Image=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+          -- set backend.container.TYPEORM_CONNECTION=${{ secrets.TYPEORM_CONNECTION }} \
+          -- set backend.container.TYPEORM_MIGRATIONS_DIR=${{ secrets.TYPEORM_MIGRATIONS_DIR }} \
+          -- set backend.container.TYPEORM_ENTITIES=${{ secrets.TYPEORM_ENTITIES }} \
+          -- set backend.container.TYPEORM_MIGRATIONS=${{ secrets.TYPEORM_MIGRATIONS }} \
+          -- set backend.container.TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} \
+          -- set backend.container.TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
+          -- set backend.container.TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
+          -- set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} \
+
+
+
+
+
   
   deploy-prod:
     name: 'deploy-production'

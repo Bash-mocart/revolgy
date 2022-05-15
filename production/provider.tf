@@ -37,3 +37,8 @@ variable "db_username" {
 variable "db_password" {
   type = string
 }
+
+output "postgresdns" {
+  value     = module.eks.dns
+  sensitive = true
+}
