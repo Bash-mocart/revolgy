@@ -395,9 +395,6 @@ jobs:
     - name: Terraform Apply
       run: |
           terraform -chdir=./staging apply -auto-approve
-          echo -n DNS_NAME=$(terraform -chdir=./staging output -json postgresdns) >> dns.txt
-          # echo DNS_NAME=$(terraform -chdir=./staging output -json postgresdns) >> $GITHUB_ENV
-          # cat $GITHUB_ENV
   
     - name: Deploying Application
       run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
@@ -406,7 +403,7 @@ jobs:
     
     - name: Eksctl, kubectl, helm tool installer
       run: |
-          chmod +x ./install-helm-eksctl-kubectl.sh
+          chmod +x install-helm-eksctl-kubectl.sh
           ./install-helm-eksctl-kubectl.sh
 
     - name: Installing ALB Controller
@@ -430,7 +427,7 @@ jobs:
 
     - name: Installing alb, prometheus, grafana
       run: | 
-          chmod +x ./install-alb-prom-graf.sh
+          chmod +x install-alb-prom-graf.sh
           ./install-alb-prom-graf.sh
 
     - name: deploying application
