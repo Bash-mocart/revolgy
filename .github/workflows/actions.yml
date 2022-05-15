@@ -393,10 +393,9 @@ jobs:
     - name: Terraform Apply
       run: |
           terraform -chdir=./staging apply -auto-approve
-          echo DNS_NAME=$(terraform -chdir=./staging output -json postgresdns) >> t.txt
-          cat t.txt
-          echo DNS_NAME=$(terraform -chdir=./staging output -json postgresdns) >> $GITHUB_ENV
-          cat $GITHUB_ENV
+          echo -n DNS_NAME=$(terraform -chdir=./staging output -json postgresdns) >> dns.txt
+          # echo DNS_NAME=$(terraform -chdir=./staging output -json postgresdns) >> $GITHUB_ENV
+          # cat $GITHUB_ENV
   
     - name: Deploying Application
       run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
@@ -446,7 +445,7 @@ jobs:
     - name: deploying application
       run: |
           cd helm
-          helm upgrade -i revolgy revolgy --set database.DNS=${{ env.DNS_NAME }} \
+          helm upgrade -i revolgy revolgy --set database.DNS=$(cat dns.txt) \
           --set frontend.containerImage=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
           --set backend.container.Image=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
           --set backend.container.TYPEORM_CONNECTION=${{ secrets.TYPEORM_CONNECTION }} \
