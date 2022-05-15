@@ -445,12 +445,8 @@ jobs:
           -- set backend.container.TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
           -- set backend.container.TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
           -- set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} \
-
-
-
-
-
-  
+          
+            
   deploy-prod:
     name: 'deploy-production'
     environment: production
