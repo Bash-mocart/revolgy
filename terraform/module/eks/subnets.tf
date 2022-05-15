@@ -9,7 +9,7 @@ resource "aws_subnet" "public_1" {
   cidr_block = var.pub-subnet-cidr-a
 
   # The AZ for the subnet.
-  availability_zone = "us-east-1a"
+  availability_zone = var.az-a
 
   # Required for EKS. Instances launched into the subnet should be assigned a public IP address.
   map_public_ip_on_launch = true
@@ -30,7 +30,7 @@ resource "aws_subnet" "public_2" {
   cidr_block = var.pub-subnet-cidr-b
 
   # The AZ for the subnet.
-  availability_zone = "us-east-1b"
+  availability_zone = var.az-b
 
   # Required for EKS. Instances launched into the subnet should be assigned a public IP address.
   map_public_ip_on_launch = true
@@ -51,7 +51,7 @@ resource "aws_subnet" "private_1" {
   cidr_block = var.pri-subnet-cidr-a
 
   # The AZ for the subnet.
-  availability_zone = "us-east-1a"
+  availability_zone = var.az-a
 
   # A map of tags to assign to the resource.
   tags = {
@@ -69,7 +69,7 @@ resource "aws_subnet" "private_2" {
   cidr_block = var.pri-subnet-cidr-b
 
   # The AZ for the subnet.
-  availability_zone = "us-east-1b"
+  availability_zone = var.az-b
 
   # A map of tags to assign to the resource.
   tags = {
