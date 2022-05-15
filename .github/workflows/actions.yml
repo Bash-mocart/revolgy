@@ -393,8 +393,8 @@ jobs:
     - name: Terraform Apply
       run: |
           terraform -chdir=./staging apply -auto-approve
-          export DNS_NAME=$(terraform output --raw postgresdns)
-
+          echo DNS_NAME=$(terraform output --raw postgresdns) >> $GITHUB_ENV
+  
     - name: Deploying Application
       run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
 
@@ -453,7 +453,7 @@ jobs:
           -- set backend.container.TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} \
           -- set backend.container.TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
           -- set backend.container.TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
-          -- set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} \
+          -- set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} 
 
 
   deploy-prod:
