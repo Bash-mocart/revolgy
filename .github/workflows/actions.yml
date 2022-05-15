@@ -390,11 +390,9 @@ jobs:
           terraform -chdir=./staging validate
     
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       run: terraform -chdir=./staging apply -auto-approve
 
     - name: Deploying Application
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       run: aws eks update-kubeconfig --name ${{ env.CLUTER_NAME }}
 
     - name: Eksctl tool installer
