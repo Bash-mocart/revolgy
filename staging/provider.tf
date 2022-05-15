@@ -26,6 +26,8 @@ module "eks" {
   source      = "../terraform/module/eks/"
   db_username = "test"
   db_password = "test12345"
+  az-a        = "eu-west-3a"
+  az-b        = "eu-west-3b"
 }
 
 variable "db_username" {
