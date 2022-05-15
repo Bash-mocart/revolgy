@@ -24,8 +24,8 @@ terraform {
 
 module "eks" {
   source      = "../terraform/module/eks/"
-  db_username = "test"
-  db_password = "test12345"
+  db_username = var.db_username
+  db_password = var.db_password
 }
 
 variable "db_username" {
@@ -34,4 +34,9 @@ variable "db_username" {
 
 variable "db_password" {
   type = string
+}
+
+output "postgresdns" {
+  value     = module.eks.dns
+  sensitive = true
 }
