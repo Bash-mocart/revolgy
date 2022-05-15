@@ -257,7 +257,7 @@ jobs:
     - name: linting frontend
       working-directory: ./frontend
       run: |
-          npm install
+          npm install  
           npm run lint
 
     
