@@ -444,7 +444,7 @@ jobs:
     - name: deploying application
       run: |
           cd helm
-          helm upgrade -i revolgy revolgy --set database.DNS={{ env.DNS_NAME }} \
+          helm upgrade -i revolgy revolgy --set database.DNS=${{ env.DNS_NAME }} \
           --set frontend.containerImage=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
           --set backend.container.Image=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
           --set backend.container.TYPEORM_CONNECTION=${{ secrets.TYPEORM_CONNECTION }} \
