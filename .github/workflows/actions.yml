@@ -447,7 +447,7 @@ jobs:
     - name: deploying application
       run: |
           echo starting
-          export DNS_NAME=$(terraform -chdir=./staging output postgresdns)
+          export DNS_NAME=$(terraform -chdir=./staging output -raw postgresdns)
           echo yes 
           echo $DNS_NAME
           cd helm
