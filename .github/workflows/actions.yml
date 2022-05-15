@@ -446,6 +446,8 @@ jobs:
       run: |
           echo starting
           export DNS_NAME=$(terraform -chdir=./staging output postgresdns)
+          echo yes 
+          echo $DNS_NAME
           cd helm
           helm upgrade -i revolgy revolgy --set database.DNS=$DNS_NAME \
           --set frontend.containerImage=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
