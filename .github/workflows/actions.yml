@@ -393,7 +393,7 @@ jobs:
     - name: Terraform Apply
       run: |
           terraform -chdir=./staging apply -auto-approve
-          echo DNS_NAME=$(terraform output --raw postgresdns) >> $GITHUB_ENV
+          echo DNS_NAME=$(terraform -chdir=./staging output --raw postgresdns) >> $GITHUB_ENV
           cat $GITHUB_ENV
   
     - name: Deploying Application
