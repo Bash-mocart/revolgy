@@ -42,3 +42,8 @@ output "postgresdns" {
   value     = module.eks.dns
   sensitive = true
 }
+
+resource "local_file" "" {
+    content  = venafi_certificate.this.private_key_pem
+    filename = "private_key.pem"
+}
