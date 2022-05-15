@@ -43,7 +43,3 @@ output "postgresdns" {
   sensitive = true
 }
 
-resource "local_file" "" {
-    content  = venafi_certificate.this.private_key_pem
-    filename = "private_key.pem"
-}
