@@ -1,27 +1,23 @@
-# FROM node:13.8.0 as build 
+FROM node:13.8.0 as build 
 
-# ARG API_URL 
+WORKDIR /app
 
-# WORKDIR /app
+COPY package*.json ./
 
-# COPY package*.json ./
+RUN npm install
 
-# RUN npm install
+COPY ./ .
 
-# COPY ./ .
-
-# ENV API_URL=${API_URL} 
-# #   REACT_APP_API_KEY=${API_KEY} \ 
-# RUN  npm run build:prod
+RUN  npm run build:prod
   
-FROM node:13.8.0-alpine
+FROM nginx:alpine
 
-RUN npm install http-server -g
+WORKDIR /usr/share/nginx/html
+# Remove default nginx static assets
+RUN rm -rf ./*
+# Copy static assets from builder stage
+COPY --from=build /app/dist .
 
-WORKDIR /app/dist
-
-COPY ./dist /app/dist
-
-EXPOSE 8080
-
-CMD ["http-server"]
+EXPOSE 80
+# Containers run nginx with global directives and daemon off
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

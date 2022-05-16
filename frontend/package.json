@@ -4,11 +4,6 @@
   "private": true,
   "description": "A frontend boilerplate with React, Redux and Typescript",
   "main": "index.js",
-  "proxy": {
-    "/api/Employees": {
-      "target": "http://instagram.com"
-    }
-  },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
@@ -62,7 +57,7 @@
     "react-test-renderer": "^16.8.6",
     "redux-devtools-extension": "^2.13.8",
     "style-loader": "^0.23.1",
-    "ts-jest": "^28.0.1",
+    "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.4",
     "tslint": "^5.18.0",
     "typescript": "^3.5.3",

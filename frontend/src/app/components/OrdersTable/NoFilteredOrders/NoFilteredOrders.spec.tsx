@@ -9,7 +9,7 @@ describe('<NoFilteredOrders>', () => {
   beforeEach(() => {
     wrapper = shallow(
       <NoFilteredOrders
-        searchText=""
+        searchText=''
         handleResetOrders={mockHandleResetOrders}
       />,
     );

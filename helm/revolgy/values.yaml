@@ -3,20 +3,20 @@ backend:
     Image: bashox/acklenav-backend:v1
     NODE_ENV: production
     VERSION: 1
-    TYPEORM_CONNECTION: postgres
-    TYPEORM_MIGRATIONS_DIR:  ./migrations
+    TYPEORM_CONNECTION: 
+    TYPEORM_MIGRATIONS_DIR:
     TYPEORM_ENTITIES: ./modules/domain/**/*.entity{ .ts,.js}
-    TYPEORM_MIGRATIONS: ./migrations/*.ts
-    TYPEORM_PORT: 5432
-    TYPEORM_USERNAME: postgres
-    TYPEORM_PASSWORD: u15ch1136
-    TYPEORM_DATABASE: postgres
+    TYPEORM_MIGRATIONS: 
+    TYPEORM_PORT: 
+    TYPEORM_USERNAME: 
+    TYPEORM_PASSWORD: 
+    TYPEORM_DATABASE: 
   service:
     name: backend-localhost
 frontend:
-  containerImage: bashox/acklenav-frontend:v10
+  containerImage: 
 database:
-  DNS: terraform-20220512233458084000000005.cef033x9wxsq.us-east-1.rds.amazonaws.com
+  DNS: 
   service: postgres-service
 # Default values for test.
 # This is a YAML-formatted file.

@@ -123,7 +123,7 @@ export class Pagination extends Component<Pagination.Props, Pagination.State> {
         disabled={this.props.page === 1 || this.props.loading}
         className={style.Pagination__button}
         onClick={this.goToPreviousPage.bind(this)}
-        title="Previous Page"
+        title='Previous Page'
       >
         <FontAwesomeIcon icon={faArrowLeft} />
         Previous
@@ -137,7 +137,7 @@ export class Pagination extends Component<Pagination.Props, Pagination.State> {
         disabled={this.props.page === this.state.pages || this.props.loading}
         className={style.Pagination__button}
         onClick={this.goToNextPage.bind(this)}
-        title="Next Page"
+        title='Next Page'
       >
         Next
         <FontAwesomeIcon icon={faArrowRight} />
@@ -161,7 +161,7 @@ export class Pagination extends Component<Pagination.Props, Pagination.State> {
           <label>Page</label>
           <input
             className={style.Pagination__input}
-            type="text"
+            type='text'
             value={this.state.currentPage}
             onKeyDown={this.handleOnKeyDown.bind(this)}
             onChange={this.handleOnChange.bind(this)}

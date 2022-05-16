@@ -51,7 +51,7 @@ export class ActionsMenu extends React.Component<ActionsMenu.Props> {
 
   goToEditEmployee = () => {
     this.props.history.push(`/employees/${this.props.employeeId}/edit`);
-  };
+  }
 
   goToViewEmployee = () => {};
 
@@ -84,7 +84,7 @@ export class ActionsMenu extends React.Component<ActionsMenu.Props> {
       },
     ]);
     this.menu.popup({ x: e.pageX, y: e.pageY });
-  };
+  }
 
   render() {
     return (

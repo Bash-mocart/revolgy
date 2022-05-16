@@ -43,3 +43,4 @@ terraform.rc
 # Whitelist some files
 !/backend/*
 !/frontend/*
+!/terraform/module/eks/*.json

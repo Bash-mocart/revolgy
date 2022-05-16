@@ -19,7 +19,7 @@ const employee: EmployeeModel = {
   bankName: 'Test First Super Second',
   accountNumber: '001-04541-6446',
   gender: Gender.MALE,
-  tags: "{'hero', 'acklen'}",
+  tags: '{\'hero\', \'acklen\'}',
   country: 'Honduras',
   region: 'Yoro',
   city: 'Morazán',

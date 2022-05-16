@@ -138,11 +138,11 @@ export class ViewEmployee extends Component<
 
   goBackToEmployees = () => {
     this.props.history.push('/employees');
-  };
+  }
 
   goToEditEmployee = () => {
     this.props.history.push(`/employees/${this.state.employeeId}/edit`);
-  };
+  }
 
   thirdLevelBreadcrumb: React.CSSProperties = {
     cursor: 'default',
@@ -157,8 +157,8 @@ export class ViewEmployee extends Component<
         isFetching={isFetching}
         searchText={searchText}
         onSearchChange={this.handleSearch}
-        placeholder="Search in the app"
-        title="General Search"
+        placeholder='Search in the app'
+        title='General Search'
       />
     );
 
@@ -187,12 +187,12 @@ export class ViewEmployee extends Component<
             <div className={style['button-group']}>
               <Button
                 className={`${style.button} ${style.primary} ${style.shaddy}`}
-                title="Edit"
+                title='Edit'
                 onClick={this.goToEditEmployee}
               >
                 <i
                   className={`${style.icon} ${style['i-edit']} ${style['margin-right']}`}
-                  aria-hidden="true"
+                  aria-hidden='true'
                 />
                 Edit Info
               </Button>
@@ -236,7 +236,7 @@ export class ViewEmployee extends Component<
                 className={`${style.cell} ${style['medium-6']} ${style['large-6']}`}
               >
                 <div className={style['input-cell']}>
-                  <label htmlFor="displayname">Display Name</label>
+                  <label htmlFor='displayname'>Display Name</label>
                   <div className={`${style['read-input']} ${style.big}`}>
                     {this.state.displayName}
                   </div>
@@ -246,7 +246,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="firstname">First Name</label>
+                      <label htmlFor='firstname'>First Name</label>
                       <div className={`${style['read-input']}`}>
                         {this.state.firstName}
                       </div>
@@ -257,7 +257,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="middlename">Middle name</label>
+                      <label htmlFor='middlename'>Middle name</label>
                       <div className={`${style['read-input']}`}>
                         {this.state.middleName}
                       </div>
@@ -270,7 +270,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="lastname">Last Name</label>
+                      <label htmlFor='lastname'>Last Name</label>
                       <div className={`${style['read-input']}`}>
                         {this.state.lastName}
                       </div>
@@ -280,7 +280,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="secondlastname">Second Last Name</label>
+                      <label htmlFor='secondlastname'>Second Last Name</label>
                       <div className={`${style['read-input']}`}>
                         {this.state.secondLastName}
                       </div>
@@ -293,7 +293,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="lastname">Gender</label>
+                      <label htmlFor='lastname'>Gender</label>
                       <div className={`${style['read-input']}`}>
                         {this.state.gender === Gender.MALE ? 'Male' : 'Female'}
                       </div>
@@ -303,7 +303,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="secondlastname">Start Date</label>
+                      <label htmlFor='secondlastname'>Start Date</label>
                       <div className={`${style['read-input']}`}>
                         {moment(this.state.startDate).format('MM-DD-YYYY')}
                       </div>
@@ -324,7 +324,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="salary">Amount</label>
+                      <label htmlFor='salary'>Amount</label>
                       <div className={style['input-group']}>
                         <span>$</span>
                         <div className={`${style['read-input']}`}>
@@ -343,7 +343,7 @@ export class ViewEmployee extends Component<
                   <div
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
-                    <label htmlFor="effectiveDate">Effective Date</label>
+                    <label htmlFor='effectiveDate'>Effective Date</label>
                     <div className={`${style['read-input']}`}>
                       {moment(this.state.effectiveDate).format('MM-DD-YYYY')}
                     </div>
@@ -355,7 +355,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="companyEmail">
+                      <label htmlFor='companyEmail'>
                         Company Email Address
                       </label>
                       <div className={`${style['read-input']}`}>
@@ -367,7 +367,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="personalEmail">
+                      <label htmlFor='personalEmail'>
                         Personal Email Address
                       </label>
                       <div className={`${style['read-input']}`}>
@@ -382,7 +382,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="phoneNumber">Phone Number</label>
+                      <label htmlFor='phoneNumber'>Phone Number</label>
                       <div className={`${style['read-input']}`}>
                         {this.state.phoneNumber}
                       </div>
@@ -392,7 +392,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="birthdate">Birthday</label>
+                      <label htmlFor='birthdate'>Birthday</label>
                       <div className={`${style['read-input']}`}>
                         {moment(this.state.birthdate).format('MM-DD-YYYY')}
                       </div>
@@ -406,7 +406,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="bankName">Bank Name</label>
+                      <label htmlFor='bankName'>Bank Name</label>
                       <div className={`${style['read-input']}`}>
                         {this.state.bankName}
                       </div>
@@ -416,7 +416,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="accountNumber">Account Number</label>
+                      <label htmlFor='accountNumber'>Account Number</label>
                       <div className={`${style['read-input']}`}>
                         {this.state.accountNumber}
                       </div>
@@ -429,7 +429,7 @@ export class ViewEmployee extends Component<
                   className={`${style.cell} ${style['small-12']} ${style['medium-8']} ${style['large-9']}`}
                 >
                   <div className={style['input-cell']}>
-                    <label htmlFor="addressLine">Address line</label>
+                    <label htmlFor='addressLine'>Address line</label>
                     <div className={`${style['read-input']}`}>
                       {this.state.address}
                     </div>
@@ -441,7 +441,7 @@ export class ViewEmployee extends Component<
                       className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                     >
                       <div className={style['input-cell']}>
-                        <label htmlFor="country">Country</label>
+                        <label htmlFor='country'>Country</label>
                         <div className={`${style['read-input']}`}>
                           {this.state.country}
                         </div>
@@ -451,7 +451,7 @@ export class ViewEmployee extends Component<
                       className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                     >
                       <div className={style['input-cell']}>
-                        <label htmlFor="region">State/Province</label>
+                        <label htmlFor='region'>State/Province</label>
                         <div className={`${style['read-input']}`}>
                           {this.state.region}
                         </div>
@@ -463,7 +463,7 @@ export class ViewEmployee extends Component<
                     className={`${style.cell} ${style['small-12']} ${style['medium-6']}`}
                   >
                     <div className={style['input-cell']}>
-                      <label htmlFor="city">City</label>
+                      <label htmlFor='city'>City</label>
                       <div className={`${style['read-input']}`}>
                         {this.state.city}
                       </div>
@@ -475,7 +475,7 @@ export class ViewEmployee extends Component<
                 className={`${style.cell} ${style['medium-2']} ${style['large-3']}`}
               >
                 <div className={style['e-emp-status']}>
-                  <label htmlFor="displayname">Employee Status</label>
+                  <label htmlFor='displayname'>Employee Status</label>
                   <div
                     className={`${style['e-status-mark']} ${
                       !this.state.isActive ? style.disabled : style.active

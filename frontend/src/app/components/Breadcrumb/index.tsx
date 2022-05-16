@@ -13,14 +13,14 @@ export namespace BreadCrumb {
 export const Breadcrumb = (props: BreadCrumb.Props) => {
   return (
     <div className={`${style.cell} ${style['medium-6']} ${style['small-12']}`}>
-      <nav aria-label="You are here:" role="navigation">
+      <nav aria-label='You are here:' role='navigation'>
         <ul className={style.breadcrumbs}>
           {props.children ? props.children : ''}
         </ul>
       </nav>
       <h3 className={style['s-title']}>
         {props.isSecondaryPage ? (
-          <a className={style['e-button-back']} href="#">
+          <a className={style['e-button-back']} href='#'>
             <i className={`${style.icon} ${style['i-chevron-left']}`} />
           </a>
         ) : (
