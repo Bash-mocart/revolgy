@@ -203,6 +203,7 @@ jobs:
   lint-test-build:
     name: 'Lint. Test, Build'
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -307,6 +308,7 @@ jobs:
         severity: 'MEDIUM,HIGH,CRITICAL'
     
     - name: Push Image to Docker Hub
+      if: github.event_name == 'pull_request'
       run: |
         docker push ${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         docker push ${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
@@ -318,8 +320,7 @@ jobs:
     needs: [lint-test-build]
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-    # needs: [lint-test-build]
-
+ 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
