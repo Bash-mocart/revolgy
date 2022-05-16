@@ -21,11 +21,3 @@ datasources:
       access: proxy
       isDefault: true
 EoF
-
-helm upgrade -i grafana grafana/grafana \
-    --namespace grafana \
-    --set persistence.storageClassName="gp2" \
-    --set persistence.enabled=true \
-    --set adminPassword=${{ secrets.GRAFANA_PASS }} \
-    --values grafana.yaml \
-    --set service.type=LoadBalancer
