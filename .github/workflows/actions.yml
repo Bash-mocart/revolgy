@@ -49,6 +49,7 @@ on: [push, pull_request]
 jobs:
   terraform:
     name: 'Terraform'
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -165,6 +166,7 @@ jobs:
   terratest:
     name: 'Terratest'
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     needs: [terraform]
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
