@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "eu-west-3"
 }
 
 
@@ -26,6 +26,8 @@ module "eks" {
   source      = "../terraform/module/eks/"
   db_username = var.db_username
   db_password = var.db_password
+  az-a        = "eu-west-3a"
+  az-b        = "eu-west-3b"
 }
 
 variable "db_username" {
@@ -40,3 +42,4 @@ output "postgresdns" {
   value     = module.eks.dns
   sensitive = true
 }
+
