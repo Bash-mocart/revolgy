@@ -19,4 +19,4 @@ spec:
         image: {{ .Values.frontend.containerImage }}
         ports:
         - name: tcp
-          containerPort: 8080
+          containerPort: 80
