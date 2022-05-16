@@ -30,21 +30,6 @@ variable "pri-subnet-cidr-b" {
     
 }
 
-variable "IAM-role-name-for-sftp" {
-    default = "dixio-stfp-role"
-    type = string
-}
-
-variable "s3-access-policy-name" {
-    default = "dixio-sftp-policy"
-    type = string
-}
-
-
-variable "ssh-public-key-file-location" {
-    default = "./sftp.pub"
-    type = string
-}
 
 variable "db_name" {
   type    = string
@@ -73,6 +58,14 @@ variable "db_password" {
   sensitive   = true
 }
 
+
+variable "az-a" {
+    type = string
+}
+
+variable "az-b" {
+    type = string
+}
 
 
 
