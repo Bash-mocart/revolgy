@@ -26,6 +26,7 @@ variable "az-b" {
     type = string
 }
 
+<<<<<<< HEAD
 variable "pri-subnet-cidr-a" {
     default = "192.168.128.0/18"
     type = string
@@ -37,6 +38,8 @@ variable "pri-subnet-cidr-b" {
     
 }
 
+=======
+>>>>>>> 84f480a982dfe6fc216b60af03c2fd032c220d55
 
 variable "db_name" {
   type    = string
@@ -65,6 +68,14 @@ variable "db_password" {
   sensitive   = true
 }
 
+
+variable "az-a" {
+    type = string
+}
+
+variable "az-b" {
+    type = string
+}
 
 
 
