@@ -203,6 +203,7 @@ jobs:
   lint-test-build:
     name: 'Lint. Test, Build'
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
 
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -393,9 +394,6 @@ jobs:
           --cluster ${{ env.CLUSTER_NAME }} \
           --approve
         curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.1/docs/install/iam_policy.json
-        aws iam create-policy \
-          --policy-name AWSLoadBalancerControllerIAMPolicy \
-          --policy-document file://iam-policy.json
         eksctl create iamserviceaccount \
           --cluster=${{ env.CLUSTER_NAME }} \
           --namespace=kube-system \
@@ -403,6 +401,9 @@ jobs:
           --attach-policy-arn=arn:aws:iam::${{ secrets.ACCOUNT_ID }}:policy/AWSLoadBalancerControllerIAMPolicy \
           --override-existing-serviceaccounts \
           --approve
+        aws iam create-policy \
+          --policy-name AWSLoadBalancerControllerIAMPolicy \
+          --policy-document file://iam-policy.json
 
     - name: Installing alb, prometheus, grafana
       run: | 
