@@ -85,7 +85,7 @@ jobs:
     - name: Terraform Init
       id: init
       run: |
-        terraform -chdir=./production init
+        # terraform -chdir=./production init
         terraform -chdir=./staging init
 
 
