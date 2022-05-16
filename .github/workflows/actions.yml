@@ -179,12 +179,10 @@ jobs:
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      if: github.event_name == 'pull_request'
       uses: actions/checkout@v3
 
      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
-      if: github.event_name == 'pull_request'
       uses: hashicorp/setup-terraform@v1
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
@@ -192,12 +190,10 @@ jobs:
   
 
     - name: Terraform terratest
-      if: github.event_name == 'pull_request'
       uses: actions/setup-go@v3
       
   # testing if the resources are properly tagged
     - name: Infra Testing
-      if: github.event_name == 'pull_request'
       id: terratest 
       run: |
         go mod init github.com/Bash-mocart/terratest
