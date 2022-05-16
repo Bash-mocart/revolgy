@@ -161,7 +161,9 @@ jobs:
       #   AWS_REGION: ${{ secrets.AWS_REGION }}
       #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+
       run: terraform -chdir=./production  apply -auto-approve
+
 
   terratest:
     name: 'Terratest'
