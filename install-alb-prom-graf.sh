@@ -9,8 +9,7 @@ helm upgrade -i prometheus prometheus-community/prometheus \
   --namespace prometheus \
   --set alertmanager.persistentVolume.storageClass="gp2",server.persistentVolume.storageClass="gp2"
 helm repo add grafana https://grafana.github.io/helm-charts
-helm update
-mkdir ${HOME}/environment/grafana
+sudo mkdir -p ${HOME}/environment/grafana
 
 cat << EoF > ${HOME}/environment/grafana/grafana.yaml
 datasources:
@@ -28,6 +27,6 @@ helm upgrade -i grafana grafana/grafana \
     --namespace grafana \
     --set persistence.storageClassName="gp2" \
     --set persistence.enabled=true \
-    --set adminPassword='seniorman' \
+    --set adminPassword=${{ secrets.GRAFANA_PASS }} \
     --values ${HOME}/environment/grafana/grafana.yaml \
     --set service.type=LoadBalancer
