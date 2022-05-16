@@ -205,7 +205,6 @@ jobs:
   lint-test-build:
     name: 'Lint. Test, Build'
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
