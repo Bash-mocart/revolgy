@@ -66,14 +66,6 @@ variable "db_password" {
 }
 
 
-variable "az-a" {
-    type = string
-}
-
-variable "az-b" {
-    type = string
-}
-
 
 
 
