@@ -203,6 +203,7 @@ jobs:
   lint-test-build:
     name: 'Lint. Test, Build'
     runs-on: ubuntu-latest
+    needs: [terratest]
     if: github.event_name == 'push'
 
 
@@ -317,7 +318,7 @@ jobs:
   deploy-staging:
     name: 'deploy-staging'
     environment: staging
-    if: needs.terratest.result == 'success' && needs.lint-test-build == 'success'
+    needs: [ lint-test-build]
     runs-on: ubuntu-latest
  
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
