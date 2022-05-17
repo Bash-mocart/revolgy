@@ -23,13 +23,13 @@ terraform {
 }
 
 module "eks" {
-  source      = "../terraform/module/eks/"
-  db_username = var.db_username
-  db_password = var.db_password
-  az-a        = "eu-west-2a"
-  az-b        = "eu-west-2b"
+  source                  = "../terraform/module/eks/"
+  db_username             = var.db_username
+  db_password             = var.db_password
+  az-a                    = "eu-west-2a"
+  az-b                    = "eu-west-2b"
   eks_node_group_iam_role = "eks_node_group_role_testing"
-  eks_cluster_role = "eks_cluster_role_testing"
+  eks_cluster_role        = "eks_cluster_role_testing"
 }
 
 variable "db_username" {
