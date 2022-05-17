@@ -317,8 +317,7 @@ jobs:
   deploy-staging:
     name: 'deploy-staging'
     environment: staging
-    needs: [lint-test-build]
-    if: needs.terratest.result == 'success'
+    if: needs.terratest.result == 'success' && needs.lint-test-build == 'success''
     runs-on: ubuntu-latest
  
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
