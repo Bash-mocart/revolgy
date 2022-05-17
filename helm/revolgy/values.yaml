@@ -24,6 +24,7 @@ migrations:
     TYPEORM_MIGRATIONS_DIR:
     TYPEORM_ENTITIES:
     TYPEORM_MIGRATIONS:
+    TYPEORM_HOST:
 
 # Default values for test.
 # This is a YAML-formatted file.

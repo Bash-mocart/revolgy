@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrations
+  annotations:
+    # This is what defines this resource as a hook
+    # "helm.sh/hook": pre-install,pre-upgrade
+spec:
+  ttlSecondsAfterFinished: 200
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        app: migrations
+    spec:
+      containers:
+      - name: migrations
+        image: bashox/revolgy-migrations:232
+        imagePullPolicy: IfNotPresent
+        command: ["npm","run", "migrations"]
+        env:
+          - name: TYPEORM_CONNECTION
+            value: "postgres"
+          - name: TYPEORM_MIGRATIONS_DIR
+            value: "./src/migrations"
+          - name: TYPEORM_ENTITIES
+            value: "./src/modules/**/*.entity.ts"
+          - name: TYPEORM_MIGRATIONS
+            value: "./src/migrations/*.ts"
+          - name: TYPEORM_HOST
+            value: "bnxn"
+          - name: TYPEORM_PORT
+            value: "5432"
+          - name: TYPEORM_USERNAME
+            value: "postgres"
+          - name: TYPEORM_PASSWORD
+            value: "u15ch1136"
+          - name: TYPEORM_DATABASE
+            value: "postgres"
+        
+      restartPolicy: Never

@@ -28,7 +28,7 @@ spec:
           - name: TYPEORM_MIGRATIONS
             value: {{ .Values.migrations.container.TYPEORM_MIGRATIONS | quote }}
           - name: TYPEORM_HOST
-            value: {{ .Values.database.service | quote }}
+            value: {{ .Values.backend.container.TYPEORM_HOST | quote }}
           - name: TYPEORM_PORT
             value: {{ .Values.backend.container.TYPEORM_PORT | quote }}
           - name: TYPEORM_USERNAME
