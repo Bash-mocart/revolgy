@@ -19,7 +19,7 @@ terraform {
     workspaces { 
       name = "production"
     }
-  } 
+  }  
 }
 
 module "eks" {
