@@ -1,147 +1,222 @@
-# jobs:
-#   deploy-staging:
-#     name: 'deploy-staging'
-#     runs-on: ubuntu-latest
-#   on:
-#     workflow_call:
-#       inputs:
-#         username:
-#           required: true
-#           type: string
+name: deploy
+
+on:
+  workflow_call:
+    inputs:
+      env_dir:
+        required: true
+      helm_dir:
+        required: true
+      IMAGE_TAG:
+        required: true
+      CLUSTER_NAME:
+        required: true
+      DOCKER_REPOSITORY:
+        required: true
+      FRONTEND_IMAGE_NAME:
+        required: true
+      BACKEND_IMAGE_NAME:
+        required: true
+      
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      AWS_REGION:
+        required: true
+      TF_API_TOKEN:
+        required: true
+      ACCOUNT_ID:
+        required: true
+      GRAFANA_PASS:
+        required: true
+      TYPEORM_CONNECTION:
+        required: true
+      TYPEORM_MIGRATIONS_DIR:
+        required: true
+      TYPEORM_MIGRATIONS:
+        required: true
+      TYPEORM_PORT:
+        required: true
+      TYPEORM_PASSWORD:
+        required: true
+      TYPEORM_USERNAME:
+        required: true
+      TYPEORM_DATABASE:
+        required: true
 
 
-#     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-#     defaults:
-#       run:
-#         shell: bash
+
+        
+
+
+
+jobs:
+  deploy:
+    name: 'deploy-staging'
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
     
-#     env:
-#       DOCKER_REPOSITORY: bashox
-#       FRONTEND_IMAGE_NAME: revolgy-frontend
-#       BACKEND_IMAGE_NAME: revolgy-backend
-#       IMAGE_TAG: ${{ github.run_number }}
-#       CLUSTER_NAME: eks
+    env:
+      DOCKER_REPOSITORY: ${{ inputs.DOCKER_REPOSITORY }}
+      FRONTEND_IMAGE_NAME: ${{ inputs.FRONTEND_IMAGE_NAME }}
+      BACKEND_IMAGE_NAME: ${{ inputs.BACKEND_IMAGE_NAME }}
+      IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
+      CLUSTER_NAME: $ {{ inputs.CLUSTER_NAME }}
     
-#     steps:
-#     # Checkout the repository to the GitHub Actions runner
-#     - name: Checkout
-#       # if: github.event_name == 'pull_request'
-#       uses: actions/checkout@v3
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
 
-#     - name: Configure AWS Credentials
-#       uses: aws-actions/configure-aws-credentials@v1
-#       with:
-#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         aws-region: ${{ secrets.AWS_REGION}}
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION}}
 
     
-#     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-#     - name: Setup Terraform
-#       uses: hashicorp/setup-terraform@v1
-#       with:
-#         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-#         terraform_wrapper: false
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        terraform_wrapper: false
 
-#     - name: Terraform Init
-#       id: init
-#       run: |
-#         terraform -chdir=./staging init
+    - name: Terraform Init
+      id: init
+      run: |
+        terraform -chdir=${{ inputs.env_dir }} init
     
 
 
-#     # Checks that all Terraform configuration files adhere to a canonical format
-#     - name: Terraform Format
-#       id: format
-#       run: |
-#         terraform -chdir=./staging fmt -check 
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      id: format
+      run: |
+        terraform -chdir=${{ inputs.env_dir }} fmt -check 
 
-#     # validating the terraform code for any syntax error
-#     - name: Terraform validate
-#       id: validate
-#       run: | 
-#           terraform -chdir=./staging validate
+    # validating the terraform code for any syntax error
+    - name: Terraform validate
+      id: validate
+      run: | 
+          terraform -chdir=${{ inputs.env_dir }} validate
     
-#     - name: Terraform Apply
-#       run: |
-#           terraform -chdir=./staging apply -auto-approve
+    - name: Terraform Apply
+      run: |
+          terraform -chdir=${{ inputs.env_dir }} apply -auto-approve
   
-#     - name: Updating kubeconfig
-#       run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
+    - name: Updating kubeconfig
+      run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
 
   
-#     - name: Eksctl, kubectl, helm tool installer
-#       run: |
-#           chmod +x install-helm-eksctl-kubectl.sh
-#           ./install-helm-eksctl-kubectl.sh
+    - name: Eksctl, kubectl, helm tool installer
+      run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
 
-#     - name: Configuring alb
-#       run: |
-#         eksctl utils associate-iam-oidc-provider \
-#           --region ${{ secrets.AWS_REGION}} \
-#           --cluster ${{ env.CLUSTER_NAME }} \
-#           --approve
+          curl --silent --location -o /usr/local/bin/kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl
+          sudo chmod +x /usr/local/bin/kubectl
+          mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+          kubectl version --client
 
-#     - name: configuring policy
-#       continue-on-error: true
-#       run: |
-#         curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.1/docs/install/iam_policy.json
-#         aws iam create-policy \
-#           --policy-name AWSLoadBalancerControllerIAMPolicy \
-#           --policy-document file://iam-policy.json
+          curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+          sudo mv /tmp/eksctl /usr/local/bin
+          eksctl version
 
-#     - name: creating service account
-#       run: |
-#         eksctl create iamserviceaccount \
-#           --cluster=${{ env.CLUSTER_NAME }} \
-#           --namespace=kube-system \
-#           --name=aws-load-balancer-controller \
-#           --attach-policy-arn=arn:aws:iam::${{ secrets.ACCOUNT_ID }}:policy/AWSLoadBalancerControllerIAMPolicy \
-#           --override-existing-serviceaccounts \
-#           --approve
 
-#     - name: helm install alb
-#       run: |  
-#         helm repo add eks https://aws.github.io/eks-charts
-#         kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
-#         helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=${{ env.CLUSTER_NAME }} --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+    - name: Configuring alb
+      run: |
+        eksctl utils associate-iam-oidc-provider \
+          --region ${{ secrets.AWS_REGION}} \
+          --cluster ${{ env.CLUSTER_NAME }} \
+          --approve
+
+    - name: configuring policy
+      continue-on-error: true
+      run: |
+        curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.1/docs/install/iam_policy.json
+        aws iam create-policy \
+          --policy-name AWSLoadBalancerControllerIAMPolicy \
+          --policy-document file://iam-policy.json
+
+    - name: creating service account
+      run: |
+        eksctl create iamserviceaccount \
+          --cluster=${{ env.CLUSTER_NAME }} \
+          --namespace=kube-system \
+          --name=aws-load-balancer-controller \
+          --attach-policy-arn=arn:aws:iam::${{ secrets.ACCOUNT_ID }}:policy/AWSLoadBalancerControllerIAMPolicy \
+          --override-existing-serviceaccounts \
+          --approve
+
+    - name: helm install alb
+      run: |  
+        helm repo add eks https://aws.github.io/eks-charts
+        kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
+        helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=${{ env.CLUSTER_NAME }} --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
 
     
-#     - name: Installing prometheus, grafana
-#       run: | 
-#           chmod +x install-alb-prom-graf.sh
-#           ./install-alb-prom-graf.sh
+    - name: Installing prometheus, grafana
+      run: | 
+          kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+          kubectl create namespace prometheus
+          kubectl create namespace grafana
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm upgrade -i prometheus prometheus-community/prometheus \
+            --namespace prometheus \
+            --set alertmanager.persistentVolume.storageClass="gp2",server.persistentVolume.storageClass="gp2"
+          helm repo add grafana https://grafana.github.io/helm-charts
+
+          cat << EoF > grafana.yaml
+          datasources:
+            datasources.yaml:
+              apiVersion: 1
+              datasources:
+              - name: Prometheus
+                type: prometheus
+                url: http://prometheus-server.prometheus.svc.cluster.local
+                access: proxy
+                isDefault: true
+          EoF
           
-#           helm upgrade -i grafana grafana/grafana \
-#             --namespace grafana \
-#             --set persistence.storageClassName="gp2" \
-#             --set persistence.enabled=true \
-#             --set adminPassword=${{ secrets.GRAFANA_PASS }} \
-#             --values grafana.yaml \
-#             --set service.type=LoadBalancer
+          helm upgrade -i grafana grafana/grafana \
+            --namespace grafana \
+            --set persistence.storageClassName="gp2" \
+            --set persistence.enabled=true \
+            --set adminPassword=${{ secrets.GRAFANA_PASS }} \
+            --values grafana.yaml \
+            --set service.type=LoadBalancer
 
 
-#     - name: deploying application
-#       run: |
-#           echo starting
-#           export DNS_NAME=$(terraform -chdir=./staging output -raw postgresdns)
-#           cd helm
-#           helm upgrade -i revolgy revolgy \
-#             --set database.DNS=$DNS_NAME \
-#             --set frontend.containerImage=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
-#             --set backend.container.Image=${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
-#             --set backend.container.TYPEORM_CONNECTION=${{ secrets.TYPEORM_CONNECTION }} \
-#             --set backend.container.TYPEORM_MIGRATIONS_DIR=${{ secrets.TYPEORM_MIGRATIONS_DIR }} \
-#             --set backend.container.TYPEORM_MIGRATIONS=${{ secrets.TYPEORM_MIGRATIONS }} \
-#             --set backend.container.TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} \
-#             --set backend.container.TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
-#             --set backend.container.TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
-#             --set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} 
+    - name: deploying application
+      run: |
+          echo starting
+          export DNS_NAME=$(terraform -chdir=${{ inputs.env_dir }} output -raw postgresdns)
+          cd {{ inputs.helm_dir }}
+          helm upgrade -i revolgy revolgy \
+            --set database.DNS=$DNS_NAME \
+            --set frontend.containerImage=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+            --set backend.container.Image=${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+            --set backend.container.TYPEORM_CONNECTION=${{ secrets.TYPEORM_CONNECTION }} \
+            --set backend.container.TYPEORM_MIGRATIONS_DIR=${{ secrets.TYPEORM_MIGRATIONS_DIR }} \
+            --set backend.container.TYPEORM_MIGRATIONS=${{ secrets.TYPEORM_MIGRATIONS }} \
+            --set backend.container.TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} \
+            --set backend.container.TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
+            --set backend.container.TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
+            --set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} 
 
-#     - name: Run Kube-Bench to check cluster config
-#       continue-on-error: true
-#       run: |
-#         kubectl apply -f https://raw.githubusercontent.com/aquasecurity/kube-bench/main/job-aks.yaml
-#         sleep 30s
-#         kubectl logs job.batch/kube-bench
-#         kubectl delete job.batch/kube-bench
+    - name: Run Kube-Bench to check cluster config
+      continue-on-error: true
+      run: |
+        kubectl apply -f https://raw.githubusercontent.com/aquasecurity/kube-bench/main/job-aks.yaml
+        sleep 30s
+        kubectl logs job.batch/kube-bench
+        kubectl delete job.batch/kube-bench
