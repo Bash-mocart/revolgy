@@ -346,7 +346,9 @@ jobs:
 
   deploy-prod:
     name: 'deploy-prod'
-    needs: [lint-test-build]
+    needs: [deploy-staging]
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+
     uses: Bash-mocart/workflow/.github/workflows/deploy.yml@main
     with: 
       environment: production
