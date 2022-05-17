@@ -315,10 +315,10 @@ jobs:
 
   deploy-staging:
     name: 'deploy-staging'
-    # environment: staging
     needs: [lint-test-build]
     uses: Bash-mocart/workflow/.github/workflows/deploy.yml@main
     with: 
+      environment: staging
       env_dir: ./staging 
       helm_dir: helm
       IMAGE_TAG: ${{ github.run_number }}
@@ -346,10 +346,10 @@ jobs:
 
   deploy-prod:
     name: 'deploy-prod'
-    # environment: production
     needs: [lint-test-build]
     uses: Bash-mocart/workflow/.github/workflows/deploy.yml@main
     with: 
+      environment: production
       env_dir: ./production
       helm_dir: helm
       IMAGE_TAG: ${{ github.run_number }}
