@@ -192,13 +192,13 @@ jobs:
     - name: Terraform terratest
       uses: actions/setup-go@v3
       
-  # testing if the resources are properly tagged
-    - name: Infra Testing
-      id: terratest 
-      run: |
-        go mod init github.com/Bash-mocart/terratest
-        go mod tidy -go=1.16 && go mod tidy -go=1.17
-        go test -v -timeout 3000m
+  # # testing if the resources are properly tagged
+  #   - name: Infra Testing
+  #     id: terratest 
+  #     run: |
+  #       go mod init github.com/Bash-mocart/terratest
+  #       go mod tidy -go=1.16 && go mod tidy -go=1.17
+  #       go test -v -timeout 3000m
 
   lint-test-build:
     name: 'Lint. Test, Build'

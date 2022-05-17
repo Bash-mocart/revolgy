@@ -9,7 +9,7 @@ import (
 func TestTerraformInfraTest(t *testing.T) {
 	// retryable errors in terraform testing.
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-		TerraformDir: "./staging",
+		TerraformDir: "./testing",
 		// Vars: map[string]interface{}{
 		// 	"db_username": "test",
 		// 	"db_password": "test",
@@ -22,7 +22,6 @@ func TestTerraformInfraTest(t *testing.T) {
 	})
 
 	defer terraform.Destroy(t, terraformOptions)
-	
 
 	terraform.InitAndApply(t, terraformOptions)
 	// // saving terraform outputs in variables
