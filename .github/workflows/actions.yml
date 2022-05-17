@@ -50,6 +50,7 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -105,7 +106,6 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      if: github.event_name == 'pull_request'
       id: plan
       run: terraform -chdir=./production plan -no-color 
 
