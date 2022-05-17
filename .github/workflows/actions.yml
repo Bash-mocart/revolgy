@@ -282,11 +282,11 @@ jobs:
       env_dir: ./staging 
       helm_dir: ./helm
       IMAGE_TAG: ${{ github.run_number }}
-      CLUSTER_NAME: ${{ CLUSTER_NAME }}
-      DOCKER_REPOSITORY: ${{ DOCKER_REPOSITORY }}
-      FRONTEND_IMAGE_NAME: ${{ FRONTEND_IMAGE_NAME }}
-      BACKEND_IMAGE_NAME: ${{ BACKEND_IMAGE_NAME }}
-      MIGRATIONS_IMAGE_NAME: ${{ MIGRATIONS_IMAGE_NAME }}
+      CLUSTER_NAME: eks
+      DOCKER_REPOSITORY: bashox
+      FRONTEND_IMAGE_NAME: revolgy-frontend
+      BACKEND_IMAGE_NAME: revolgy-backend
+      MIGRATIONS_IMAGE_NAME: revolgy-migrations
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -319,11 +319,11 @@ jobs:
       env_dir: ./production
       helm_dir: helm
       IMAGE_TAG: ${{ github.run_number }}
-      CLUSTER_NAME: $CLUSTER_NAME
-      DOCKER_REPOSITORY: $DOCKER_REPOSITORY
-      FRONTEND_IMAGE_NAME: $FRONTEND_IMAGE_NAME
-      BACKEND_IMAGE_NAME: $BACKEND_IMAGE_NAME
-      MIGRATIONS_IMAGE_NAME: $MIGRATIONS_IMAGE_NAME
+      CLUSTER_NAME: eks
+      DOCKER_REPOSITORY: bashox
+      FRONTEND_IMAGE_NAME: revolgy-frontend
+      BACKEND_IMAGE_NAME: revolgy-backend
+      MIGRATIONS_IMAGE_NAME: revolgy-migrations
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
