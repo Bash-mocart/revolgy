@@ -1,0 +1,13 @@
+FROM node:13.8.0 as build
+
+
+# Create app directory
+WORKDIR /app
+
+RUN npm install
+
+COPY ./ .
+
+RUN npm run build
+
+CMD npm run migrations

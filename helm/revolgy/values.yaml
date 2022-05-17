@@ -1,6 +1,6 @@
 backend:
   container:
-    Image: bashox/acklenav-backend:v1
+    Image: 
     NODE_ENV: production
     VERSION: 1
     TYPEORM_CONNECTION: 
@@ -18,6 +18,13 @@ frontend:
 database:
   DNS: 
   service: postgres-service
+migrations:
+  containerImage:
+  container:
+    TYPEORM_MIGRATIONS_DIR:
+    TYPEORM_ENTITIES:
+    TYPEORM_MIGRATIONS:
+
 # Default values for test.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.

@@ -20,6 +20,7 @@ COPY --from=build /app/node_modules/ .
 
 WORKDIR /app/dist/
 
+# copying build artifacts 
 COPY --from=build /app/dist .
 
 COPY --from=build /app/package*.json  ./
