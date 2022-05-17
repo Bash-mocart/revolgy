@@ -12,10 +12,12 @@ env:
 
 
 jobs:
+  
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -278,12 +280,12 @@ jobs:
       environment: staging
       env_dir: ./staging 
       helm_dir: ./helm
-      IMAGE_TAG: ${{ github.run_number }}
-      CLUSTER_NAME: ${{ env.CLUSTER_NAME }}
-      DOCKER_REPOSITORY: ${{ env.DOCKER_REPOSITORY }}
-      FRONTEND_IMAGE_NAME: ${{ env.FRONTEND_IMAGE_NAME }}
-      BACKEND_IMAGE_NAME: ${{ env.BACKEND_IMAGE_NAME }}
-      # MIGRATIONS_IMAGE_NAME: ${{ env.MIGRATIONS_IMAGE_NAME }}
+      IMAGE_TAG: '${{ github.run_number }}'
+      CLUSTER_NAME: '${{ env.CLUSTER_NAME }}'
+      DOCKER_REPOSITORY: '${{ env.DOCKER_REPOSITORY }}'
+      FRONTEND_IMAGE_NAME: '${{ env.FRONTEND_IMAGE_NAME }}'
+      BACKEND_IMAGE_NAME: '${{ env.BACKEND_IMAGE_NAME }}'
+      MIGRATIONS_IMAGE_NAME: '${{ env.MIGRATIONS_IMAGE_NAME }}'
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
