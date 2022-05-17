@@ -4,7 +4,7 @@ metadata:
   name: migrations
   annotations:
     # This is what defines this resource as a hook
-    "helm.sh/hook": pre-install
+    "helm.sh/hook": pre-install,pre-upgrade
 spec:
   ttlSecondsAfterFinished: 200
   backoffLimit: 1

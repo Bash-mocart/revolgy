@@ -14,11 +14,14 @@
 
 
 ## Monitoring
- For monitoring, I used prometheus and so cool grafana to monitor the kubernetes cluster and its resources
+ For monitoring, I used prometheus and so cool grafana to monitor the kubernetes cluster and its resource
 
 
 ## Logging
- While I exported postgres logs to cloudwatch, the application logs can be seen by running kubectl logs <POD NAME>. To export the logs to cloudwatch, I will install fluentd  
+ While I exported postgres logs to cloudwatch, the application logs can be seen by running kubectl logs {POD NAME}. To export the logs to cloudwatch, I will install fluentd using helm chart, After creating a log group in cloudwatch, fluentd will export container logs to cloudwatch with necessary permissions
+
+## Purpose of the app
+  The app saves a lists of employers in postgres database. The backend upon requests gets the data from the database and sends it to the frontend to display to the client.
 
 
 
