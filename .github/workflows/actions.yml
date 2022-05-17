@@ -167,6 +167,7 @@ jobs:
   terratest:
     name: 'Terratest'
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     needs: [terraform]
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -192,7 +193,6 @@ jobs:
       
   # testing if the resources are properly tagged
     - name: Infra Testing
-      if: github.event_name == 'pull_request'
       id: terratest 
       run: |
         go mod init github.com/Bash-mocart/terratest
@@ -202,7 +202,6 @@ jobs:
   lint-test-build:
     name: 'Lint. Test, Build'
     runs-on: ubuntu-latest
-    needs: [terratest]
     if: github.event_name == 'push'
 
 
@@ -317,7 +316,7 @@ jobs:
   deploy-staging:
     name: 'deploy-staging'
     environment: staging
-    needs: [ lint-test-build]
+    needs: [lint-test-build]
     runs-on: ubuntu-latest
  
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -335,7 +334,6 @@ jobs:
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      # if: github.event_name == 'pull_request'
       uses: actions/checkout@v3
 
     - name: Configure AWS Credentials
