@@ -311,7 +311,7 @@ jobs:
     with: 
       environment: staging
       env_dir: ./staging 
-      helm_dir: helm
+      helm_dir: ./helm
       IMAGE_TAG: ${{ github.run_number }}
       CLUSTER_NAME: eks
       DOCKER_REPOSITORY: bashox
@@ -330,7 +330,7 @@ jobs:
       TYPEORM_PORT: ${{ secrets.TYPEORM_PORT }}
       TYPEORM_PASSWORD: ${{ secrets.TYPEORM_PASSWORD }}
       TYPEORM_USERNAME: ${{ secrets.TYPEORM_USERNAME }}
-      TYPEORM_DATABASE: ${{ secrets.TYPEORM_DATABASE }}
+      TYPEORM_DATABASE: ${{ secrets.TYPEORM_DATABASE }} 
 
 
 
