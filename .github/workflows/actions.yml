@@ -315,7 +315,7 @@ jobs:
 
   deploy-staging:
     name: 'deploy-staging'
-    environment: staging
+    # environment: staging
     needs: [lint-test-build]
     uses: Bash-mocart/workflow/.github/workflows/deploy.yml@main
     with: 
@@ -346,7 +346,7 @@ jobs:
 
   deploy-prod:
     name: 'deploy-prod'
-    environment: production
+    # environment: production
     needs: [lint-test-build]
     uses: Bash-mocart/workflow/.github/workflows/deploy.yml@main
     with: 
