@@ -44,12 +44,11 @@
 
 name: 'Terraform'
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   terraform:
     name: 'Terraform'
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -104,11 +103,11 @@ jobs:
     #       terraform -chdir=./staging validate
 
 
-    # # Generates an execution plan for Terraform
-    # - name: Terraform Plan
-    #   if: github.event_name == 'pull_request'
-    #   id: plan
-    #   run: terraform -chdir=./production plan -no-color 
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      if: github.event_name == 'pull_request'
+      id: plan
+      run: terraform -chdir=./production plan -no-color 
 
     # - name: Terraform Plan Status
     #   if: steps.plan.outcome == 'failure'
@@ -168,7 +167,6 @@ jobs:
   terratest:
     name: 'Terratest'
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     needs: [terraform]
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -192,13 +190,14 @@ jobs:
     - name: Terraform terratest
       uses: actions/setup-go@v3
       
-  # # testing if the resources are properly tagged
-  #   - name: Infra Testing
-  #     id: terratest 
-  #     run: |
-  #       go mod init github.com/Bash-mocart/terratest
-  #       go mod tidy -go=1.16 && go mod tidy -go=1.17
-  #       go test -v -timeout 3000m
+  # testing if the resources are properly tagged
+    - name: Infra Testing
+      if: github.event_name == 'pull_request'
+      id: terratest 
+      run: |
+        go mod init github.com/Bash-mocart/terratest
+        go mod tidy -go=1.16 && go mod tidy -go=1.17
+        go test -v -timeout 3000m
 
   lint-test-build:
     name: 'Lint. Test, Build'
