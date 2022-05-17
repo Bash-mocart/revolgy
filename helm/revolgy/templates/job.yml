@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: migrations
-        image: {{ .Values.migrations.container.Image }}
+        image: {{ .Values.migrations.containerImage }}
         imagePullPolicy: IfNotPresent
         env:
           - name: TYPEORM_CONNECTION
@@ -25,7 +25,7 @@ spec:
           - name: TYPEORM_ENTITIES
             value: {{ .Values.migrations.container.TYPEORM_ENTITIES | quote }}
           - name: TYPEORM_MIGRATIONS
-            value: {{ .Values.migrations.TYPEORM_MIGRATIONS | quote }}
+            value: {{ .Values.migrations.container.TYPEORM_MIGRATIONS | quote }}
           - name: TYPEORM_HOST
             value: {{ .Values.database.service | quote }}
           - name: TYPEORM_PORT
