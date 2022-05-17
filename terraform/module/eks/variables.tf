@@ -65,7 +65,13 @@ variable "db_password" {
   sensitive   = true
 }
 
+variable "eks_node_group_iam_role" {
+  type = string
+}
 
+variable "eks_cluster_role" {
+  type = string
+}
 
 
 

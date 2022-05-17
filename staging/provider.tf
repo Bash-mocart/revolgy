@@ -28,6 +28,8 @@ module "eks" {
   db_password = var.db_password
   az-a        = "eu-west-3a"
   az-b        = "eu-west-3b"
+  eks_node_group_iam_role = "eks_node_group_role_staging"
+  eks_cluster_role = "eks_cluster_role_staging"
 }
 
 variable "db_username" {

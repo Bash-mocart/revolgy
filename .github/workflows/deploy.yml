@@ -3,20 +3,30 @@ name: deploy
 on:
   workflow_call:
     inputs:
+      environment:
+        required: true
+        type: string
       env_dir:
         required: true
+        type: string
       helm_dir:
         required: true
+        type: string
       IMAGE_TAG:
         required: true
+        type: string
       CLUSTER_NAME:
         required: true
+        type: string
       DOCKER_REPOSITORY:
         required: true
+        type: string
       FRONTEND_IMAGE_NAME:
         required: true
+        type: string
       BACKEND_IMAGE_NAME:
         required: true
+        type: string
       
     secrets:
       AWS_ACCESS_KEY_ID:
@@ -46,16 +56,11 @@ on:
       TYPEORM_DATABASE:
         required: true
 
-
-
-        
-
-
-
 jobs:
   deploy:
     name: 'deploy-staging'
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environments }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:

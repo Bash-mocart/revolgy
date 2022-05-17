@@ -4,7 +4,7 @@
 # Create IAM role for EKS Node Group
 resource "aws_iam_role" "nodes_general" {
   # The name of the role
-  name = "eks-node-group-general"
+  name = var.eks_node_group_iam_role
 
   # The policy that grants an entity permission to assume the role.
   assume_role_policy = <<POLICY
