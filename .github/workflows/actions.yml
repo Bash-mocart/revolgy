@@ -346,9 +346,9 @@ jobs:
 
   deploy-prod:
     name: 'deploy-prod'
-    environment: staging
+    environment: production
     needs: [lint-test-build]
-    uses: Bash-mocart/workflow/.github/workflow/deploy.yml@main
+    uses: Bash-mocart/workflow/.github/workflows/deploy.yml@main
     with: 
       env_dir: ./production
       helm_dir: helm
