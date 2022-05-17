@@ -317,7 +317,7 @@ jobs:
   deploy-staging:
     name: 'deploy-staging'
     environment: staging
-    # needs: [lint-test-build]
+    needs: [lint-test-build]
     runs-on: ubuntu-latest
  
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -379,17 +379,11 @@ jobs:
     - name: Updating kubeconfig
       run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
 
-    
-    
+  
     - name: Eksctl, kubectl, helm tool installer
       run: |
           chmod +x install-helm-eksctl-kubectl.sh
           ./install-helm-eksctl-kubectl.sh
-
-    - name: deleting existing policy
-      continue-on-error: true
-      run: |
-        aws iam delete-policy --policy-arn arn:aws:iam::${{ secrets.ACCOUNT_ID }}:policy/AWSLoadBalancerControllerIAMPolicy
 
     - name: Configuring alb
       run: |
@@ -397,11 +391,17 @@ jobs:
           --region ${{ secrets.AWS_REGION}} \
           --cluster ${{ env.CLUSTER_NAME }} \
           --approve
+
+    - name: configuring policy
+      continue-on-error: true
+      run: |
         curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.1/docs/install/iam_policy.json
         aws iam create-policy \
           --policy-name AWSLoadBalancerControllerIAMPolicy \
           --policy-document file://iam-policy.json
 
+    - name: creating service account
+      run: |
         eksctl create iamserviceaccount \
           --cluster=${{ env.CLUSTER_NAME }} \
           --namespace=kube-system \
@@ -527,24 +527,23 @@ jobs:
           chmod +x install-helm-eksctl-kubectl.sh
           ./install-helm-eksctl-kubectl.sh
       
-    - name: deleting existing policy
-      continue-on-error: true
-      run: |
-        aws iam delete-policy --policy-arn arn:aws:iam::${{ secrets.ACCOUNT_ID }}:policy/AWSLoadBalancerControllerIAMPolicy
-
-
     - name: Configuring alb
-      continue-on-error: false
       run: |
         eksctl utils associate-iam-oidc-provider \
           --region ${{ secrets.AWS_REGION}} \
           --cluster ${{ env.CLUSTER_NAME }} \
           --approve
+
+    - name: configuring policy
+      continue-on-error: true
+      run: |
         curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.1/docs/install/iam_policy.json
         aws iam create-policy \
           --policy-name AWSLoadBalancerControllerIAMPolicy \
           --policy-document file://iam-policy.json
 
+    - name: creating service account
+      run: |
         eksctl create iamserviceaccount \
           --cluster=${{ env.CLUSTER_NAME }} \
           --namespace=kube-system \
@@ -552,7 +551,7 @@ jobs:
           --attach-policy-arn=arn:aws:iam::${{ secrets.ACCOUNT_ID }}:policy/AWSLoadBalancerControllerIAMPolicy \
           --override-existing-serviceaccounts \
           --approve
-    
+
     - name: helm install alb
       run: |  
         helm repo add eks https://aws.github.io/eks-charts
