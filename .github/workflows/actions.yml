@@ -200,118 +200,118 @@ jobs:
   #       go mod tidy -go=1.16 && go mod tidy -go=1.17
   #       go test -v -timeout 3000m
 
-  # lint-test-build:
-  #   name: 'Lint. Test, Build'
-  #   runs-on: ubuntu-latest
-  #   if: github.event_name == 'push'
+  lint-test-build:
+    name: 'Lint. Test, Build'
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
 
 
-  #   # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-  #   defaults:
-  #     run:
-  #       shell: bash
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
     
-  #   env:
-  #     DOCKER_REPOSITORY: bashox
-  #     FRONTEND_IMAGE_NAME: revolgy-frontend
-  #     BACKEND_IMAGE_NAME: revolgy-backend
-  #     IMAGE_TAG: ${{ github.run_number }}
+    env:
+      DOCKER_REPOSITORY: bashox
+      FRONTEND_IMAGE_NAME: revolgy-frontend
+      BACKEND_IMAGE_NAME: revolgy-backend
+      IMAGE_TAG: ${{ github.run_number }}
     
-  #   steps:
-  #   # Checkout the repository to the GitHub Actions runner
-  #   - name: Checkout
-  #     uses: actions/checkout@v3
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
 
-  #   - name: setting up node
-  #     uses: actions/setup-node@v3
-  #     with:
-  #       node-version: 13.8.0
+    - name: setting up node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 13.8.0
         
 
-  #   - name: linting backend
-  #     working-directory: ./backend
-  #     run: |
-  #         npm install
-  #         npm run lint
+    - name: linting backend
+      working-directory: ./backend
+      run: |
+          npm install
+          npm run lint
 
-  #   - name: linting frontend
-  #     working-directory: ./frontend
-  #     run: |
-  #         npm install  
-  #         npm run lint
+    - name: linting frontend
+      working-directory: ./frontend
+      run: |
+          npm install  
+          npm run lint
 
     
-  #   - name: testing backend
-  #     working-directory: ./backend
-  #     run: |
-  #         npm run test
+    - name: testing backend
+      working-directory: ./backend
+      run: |
+          npm run test
         
     
-  #   - name: testing frontend
-  #     working-directory: ./frontend
-  #     run: |
-  #         npm run test
+    - name: testing frontend
+      working-directory: ./frontend
+      run: |
+          npm run test
 
-  #   - name: formatting frontend
-  #     working-directory: ./frontend
-  #     run: |
-  #         npm run format
+    - name: formatting frontend
+      working-directory: ./frontend
+      run: |
+          npm run format
     
        
-  #   - name: format backend
-  #     working-directory: ./backend
-  #     run: |
-  #         npm run format
+    - name: format backend
+      working-directory: ./backend
+      run: |
+          npm run format
     
-  #   - name: Set up QEMU
-  #     uses: docker/setup-qemu-action@v2
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
     
-  #   - name: Set up Docker Buildx
-  #     uses: docker/setup-buildx-action@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
     
-  #   - name: Login to DockerHub
-  #     uses: docker/login-action@v2
-  #     with:
-  #       username: ${{ secrets.DOCKERHUB_USERNAME }}
-  #       password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
     
-  #   - name: Build Docker Image frontend
-  #     working-directory: ./frontend
-  #     run:
-  #       docker build --tag ${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} --no-cache .
+    - name: Build Docker Image frontend
+      working-directory: ./frontend
+      run:
+        docker build --tag ${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} --no-cache .
     
-  #   - name: Build Docker Image backend
-  #     working-directory: ./backend
-  #     run:
-  #       docker build --tag ${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} --no-cache .
+    - name: Build Docker Image backend
+      working-directory: ./backend
+      run:
+        docker build --tag ${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} --no-cache .
 
-  #   - name: Run Trivy vulnerability scanner frontend
-  #     uses: aquasecurity/trivy-action@master
-  #     continue-on-error: true
-  #     with:
-  #       image-ref: 'docker.io/${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
-  #       format: 'table'
-  #       exit-code: '1'
-  #       ignore-unfixed: true
-  #       vuln-type: 'os'
-  #       severity: 'MEDIUM,HIGH,CRITICAL'
+    - name: Run Trivy vulnerability scanner frontend
+      uses: aquasecurity/trivy-action@master
+      continue-on-error: true
+      with:
+        image-ref: 'docker.io/${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os'
+        severity: 'MEDIUM,HIGH,CRITICAL'
 
     
-  #   - name: Run Trivy vulnerability scanner backend
-  #     uses: aquasecurity/trivy-action@master
-  #     continue-on-error: true
-  #     with:
-  #       image-ref: 'docker.io/${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
-  #       format: 'table'
-  #       exit-code: '1'
-  #       ignore-unfixed: true
-  #       vuln-type: 'os'
-  #       severity: 'MEDIUM,HIGH,CRITICAL'
+    - name: Run Trivy vulnerability scanner backend
+      uses: aquasecurity/trivy-action@master
+      continue-on-error: true
+      with:
+        image-ref: 'docker.io/${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os'
+        severity: 'MEDIUM,HIGH,CRITICAL'
     
-  #   - name: Push Image to Docker Hub
-  #     run: |
-  #       docker push ${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-  #       docker push ${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+    - name: Push Image to Docker Hub
+      run: |
+        docker push ${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        docker push ${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
   
 
   deploy-staging:
@@ -391,7 +391,7 @@ jobs:
       run: |
         aws iam delete-policy --policy-arn arn:aws:iam::${{ secrets.ACCOUNT_ID }}:policy/AWSLoadBalancerControllerIAMPolicy
 
-    - name: Installing ALB Controller
+    - name: Configuring alb
       run: |
         eksctl utils associate-iam-oidc-provider \
           --region ${{ secrets.AWS_REGION}} \
@@ -410,14 +410,14 @@ jobs:
           --override-existing-serviceaccounts \
           --approve
 
-    - name: Eksctl, kubectl, helm tool installer
+    - name: helm install alb
       run: |  
         helm repo add eks https://aws.github.io/eks-charts
         kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
         helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=${{ env.CLUSTER_NAME }} --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
 
     
-    - name: Installing alb, prometheus, grafana
+    - name: Installing prometheus, grafana
       run: | 
           chmod +x install-alb-prom-graf.sh
           ./install-alb-prom-graf.sh
@@ -431,22 +431,22 @@ jobs:
             --set service.type=LoadBalancer
 
 
-    # - name: deploying application
-    #   run: |
-    #       echo starting
-    #       export DNS_NAME=$(terraform -chdir=./staging output -raw postgresdns)
-    #       cd helm
-    #       helm upgrade -i revolgy revolgy \
-    #         --set database.DNS=$DNS_NAME \
-    #         --set frontend.containerImage=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
-    #         --set backend.container.Image=${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
-    #         --set backend.container.TYPEORM_CONNECTION=${{ secrets.TYPEORM_CONNECTION }} \
-    #         --set backend.container.TYPEORM_MIGRATIONS_DIR=${{ secrets.TYPEORM_MIGRATIONS_DIR }} \
-    #         --set backend.container.TYPEORM_MIGRATIONS=${{ secrets.TYPEORM_MIGRATIONS }} \
-    #         --set backend.container.TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} \
-    #         --set backend.container.TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
-    #         --set backend.container.TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
-    #         --set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} 
+    - name: deploying application
+      run: |
+          echo starting
+          export DNS_NAME=$(terraform -chdir=./staging output -raw postgresdns)
+          cd helm
+          helm upgrade -i revolgy revolgy \
+            --set database.DNS=$DNS_NAME \
+            --set frontend.containerImage=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+            --set backend.container.Image=${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+            --set backend.container.TYPEORM_CONNECTION=${{ secrets.TYPEORM_CONNECTION }} \
+            --set backend.container.TYPEORM_MIGRATIONS_DIR=${{ secrets.TYPEORM_MIGRATIONS_DIR }} \
+            --set backend.container.TYPEORM_MIGRATIONS=${{ secrets.TYPEORM_MIGRATIONS }} \
+            --set backend.container.TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} \
+            --set backend.container.TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
+            --set backend.container.TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
+            --set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} 
 
     - name: Run Kube-Bench to check cluster config
       continue-on-error: true
@@ -526,8 +526,14 @@ jobs:
       run: |
           chmod +x install-helm-eksctl-kubectl.sh
           ./install-helm-eksctl-kubectl.sh
+      
+    - name: deleting existing policy
+      continue-on-error: true
+      run: |
+        aws iam delete-policy --policy-arn arn:aws:iam::${{ secrets.ACCOUNT_ID }}:policy/AWSLoadBalancerControllerIAMPolicy
 
-    - name: Installing ALB Controller
+
+    - name: Configuring alb
       continue-on-error: false
       run: |
         eksctl utils associate-iam-oidc-provider \
@@ -546,9 +552,12 @@ jobs:
           --attach-policy-arn=arn:aws:iam::${{ secrets.ACCOUNT_ID }}:policy/AWSLoadBalancerControllerIAMPolicy \
           --override-existing-serviceaccounts \
           --approve
+    
+    - name: helm install alb
+      run: |  
         helm repo add eks https://aws.github.io/eks-charts
         kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
-        helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=${{ env.CLUSTER_NAME }} --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+        helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=${{ env.CLUSTER_NAME }} --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
 
     - name: Installing prometheus, grafana
       run: | 
