@@ -20,7 +20,7 @@ terraform {
       name = "production"
     }
   }  
-}
+} 
 
 module "eks" {
   source                  = "../terraform/module/eks/"
