@@ -317,7 +317,7 @@ jobs:
   deploy-staging:
     name: 'deploy-staging'
     environment: staging
-    needs: [lint-test-build]
+    # needs: [lint-test-build]
     runs-on: ubuntu-latest
  
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -433,22 +433,22 @@ jobs:
             --set service.type=LoadBalancer
 
 
-    - name: deploying application
-      run: |
-          echo starting
-          export DNS_NAME=$(terraform -chdir=./staging output -raw postgresdns)
-          cd helm
-          helm upgrade -i revolgy revolgy \
-            --set database.DNS=$DNS_NAME \
-            --set frontend.containerImage=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
-            --set backend.container.Image=${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
-            --set backend.container.TYPEORM_CONNECTION=${{ secrets.TYPEORM_CONNECTION }} \
-            --set backend.container.TYPEORM_MIGRATIONS_DIR=${{ secrets.TYPEORM_MIGRATIONS_DIR }} \
-            --set backend.container.TYPEORM_MIGRATIONS=${{ secrets.TYPEORM_MIGRATIONS }} \
-            --set backend.container.TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} \
-            --set backend.container.TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
-            --set backend.container.TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
-            --set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} 
+    # - name: deploying application
+    #   run: |
+    #       echo starting
+    #       export DNS_NAME=$(terraform -chdir=./staging output -raw postgresdns)
+    #       cd helm
+    #       helm upgrade -i revolgy revolgy \
+    #         --set database.DNS=$DNS_NAME \
+    #         --set frontend.containerImage=${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+    #         --set backend.container.Image=${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+    #         --set backend.container.TYPEORM_CONNECTION=${{ secrets.TYPEORM_CONNECTION }} \
+    #         --set backend.container.TYPEORM_MIGRATIONS_DIR=${{ secrets.TYPEORM_MIGRATIONS_DIR }} \
+    #         --set backend.container.TYPEORM_MIGRATIONS=${{ secrets.TYPEORM_MIGRATIONS }} \
+    #         --set backend.container.TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} \
+    #         --set backend.container.TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} \
+    #         --set backend.container.TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} \
+    #         --set backend.container.TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} 
 
     - name: Run Kube-Bench to check cluster config
       continue-on-error: true
