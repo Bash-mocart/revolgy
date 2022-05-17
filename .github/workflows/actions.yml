@@ -227,26 +227,26 @@ jobs:
     - name: Build Docker Image frontend
       working-directory: ./frontend
       run:
-        docker build --tag ${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} --no-cache .
+        docker build --tag $DOCKER_REPOSITORY/$FRONTEND_IMAGE_NAME:$IMAGE_TAG --no-cache .
      
      # building docker container backend 
     - name: Build Docker Image migrations
       working-directory: ./backend
       run:
-        docker build --tag ${{ env.DOCKER_REPOSITORY }}/${{ env.MIGRATIONS_IMAGE_NAME }}:${{ env.IMAGE_TAG }} -f Dockerfile_migrations --no-cache .
+        docker build --tag $DOCKER_REPOSITORY/$MIGRATIONS_IMAGE_NAME:$IMAGE_TAG -f Dockerfile_migrations --no-cache .
       
      # building docker container backend 
     - name: Build Docker Image backend
       working-directory: ./backend
       run:
-        docker build --tag ${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }} --no-cache .
+        docker build --tag $DOCKER_REPOSITORY/$BACKEND_IMAGE_NAME:$IMAGE_TAG --no-cache .
   
   # scanning docker container 
     - name: Run Trivy vulnerability scanner frontend
       uses: aquasecurity/trivy-action@master
       continue-on-error: true # should be false in a real prod environment for the pipeline to fail and alert developers team of any security issue
       with:
-        image-ref: 'docker.io/${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
+        image-ref: 'docker.io/$DOCKER_REPOSITORY/$FRONTEND_IMAGE_NAME:$IMAGE_TAG'
         format: 'table'
         exit-code: '1'
         ignore-unfixed: true
@@ -258,7 +258,7 @@ jobs:
       uses: aquasecurity/trivy-action@master
       continue-on-error: true # should be false in a real prod environment for the pipeline to fail and alert developers team of any security issue
       with:
-        image-ref: 'docker.io/${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
+        image-ref: 'docker.io/$DOCKER_REPOSITORY/$BACKEND_IMAGE_NAME:$env.IMAGE_TAG'
         format: 'table'
         exit-code: '1'
         ignore-unfixed: true
@@ -267,8 +267,9 @@ jobs:
     
     - name: Push Image to Docker Hub
       run: |
-        docker push ${{ env.DOCKER_REPOSITORY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-        docker push ${{ env.DOCKER_REPOSITORY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        docker push $DOCKER_REPOSITORY/$BACKEND_IMAGE_NAME:$IMAGE_TAG
+        docker push $DOCKER_REPOSITORY/$FRONTEND_IMAGE_NAME:$IMAGE_TAG
+        docker push $DOCKER_REPOSITORY/$MIGRATIONS_IMAGE_NAME:$IMAGE_TAG
   
 #deploying to staging for the qa team
 
@@ -318,11 +319,11 @@ jobs:
       env_dir: ./production
       helm_dir: helm
       IMAGE_TAG: ${{ github.run_number }}
-      CLUSTER_NAME: ${{ env.CLUSTER_NAME }}
-      DOCKER_REPOSITORY: ${{ env.DOCKER_REPOSITORY }}
-      FRONTEND_IMAGE_NAME: ${{ env.FRONTEND_IMAGE_NAME }}
-      BACKEND_IMAGE_NAME: ${{ env.BACKEND_IMAGE_NAME }}
-      MIGRATIONS_IMAGE_NAME: ${{ env.MIGRATIONS_IMAGE_NAME }}
+      CLUSTER_NAME: $CLUSTER_NAME
+      DOCKER_REPOSITORY: $DOCKER_REPOSITORY
+      FRONTEND_IMAGE_NAME: $FRONTEND_IMAGE_NAME
+      BACKEND_IMAGE_NAME: $BACKEND_IMAGE_NAME
+      MIGRATIONS_IMAGE_NAME: $MIGRATIONS_IMAGE_NAME
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
