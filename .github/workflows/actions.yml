@@ -330,7 +330,7 @@ jobs:
       TYPEORM_PORT: ${{ secrets.TYPEORM_PORT }}
       TYPEORM_PASSWORD: ${{ secrets.TYPEORM_PASSWORD }}
       TYPEORM_USERNAME: ${{ secrets.TYPEORM_USERNAME }}
-      TYPEORM_DATABASE: ${{ secrets.TYPEORM_DATABASE }} 
+      TYPEORM_DATABASE: ${{ secrets.TYPEORM_DATABASE }}  
 
 
 
