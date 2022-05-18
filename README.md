@@ -11,7 +11,6 @@
 * Npm
 * Postgres RDS
 * Terraform
-* Terratest
 * Docker
 * AWS EKS (Kubernetes)
 * Github Actions (CI/CD)
