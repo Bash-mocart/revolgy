@@ -275,7 +275,7 @@ jobs:
 
   deploy-staging:
     name: 'deploy-staging'
-    # needs: [lint-test-build]
+    needs: [lint-test-build]
     uses: Bash-mocart/workflow/.github/workflows/deploy.yml@main #uses a resuable job at https://https://raw.githubusercontent.com/Bash-mocart/workflow/main/.github/workflows/deploy.yml
     with: 
       environment: staging
