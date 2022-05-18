@@ -112,44 +112,6 @@ jobs:
             body: output
           })
 
-      # On push to main, build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-
-  terratest:
-    name: 'Terratest'
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    needs: [terraform]
-
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
-    
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
-
-     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-        terraform_wrapper: false ## setting it false because it gives terratest assertion, problem
-  
-
-    - name: Terraform terratest
-      uses: actions/setup-go@v3
-      
-  # testing the infrastructure incase of any change
-    - name: Infra Testing
-      id: terratest 
-      run: |
-        go mod init github.com/Bash-mocart/terratest
-        go mod tidy -go=1.16 && go mod tidy -go=1.17
-        go test -v -timeout 3000m
-
  #lintng, testing and building
   lint-test-build:
     name: 'Lint. Test, Build'
