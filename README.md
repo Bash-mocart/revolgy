@@ -37,6 +37,14 @@
 ## Purpose of the app
   The app saves a lists of employers in postgres database. The backend upon request gets the data from the database and sends it to the frontend to display to the client.
 
+## Application update process 
+ Once you create a branch out of the master branch for your new feature, after testing your new feature locally and pushing it into your remote branch, the workflow will get triggered and will run series of jobs.
+ First job will be for linting, running tests and building and scanning docker images. 
+ Then it will deploy your new application to a staging environment. This is where your new application gets deployed in a near production environment for the qa team and other teams to assess. Incase your new feature depends on a newly created database schema table, this job also handles database migrations. Helm handles the deployment of the newly created application. When the qa team successfully assess the application, you can now create a pull request for the new app to be deployed in a prod environment.
+
+## Security
+ Security is the most important aspect of software release, the architecture I built is highly optimized for security following least priviledged principles by using the right policies and IAM roles for my eks cluser. I also created service account with the right permissions for my eks pods
+
 
 ## Infra Chart
 ![infra_chart](./infra.png?raw=true "Title")  
