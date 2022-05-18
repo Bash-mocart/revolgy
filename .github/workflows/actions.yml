@@ -151,137 +151,137 @@ jobs:
         go test -v -timeout 3000m
 
 # lintng, testing and building
-  lint-test-build:
-    name: 'Lint. Test, Build'
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+  # lint-test-build:
+  #   name: 'Lint. Test, Build'
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'push'
 
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
+  #   # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
     
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
+  #   steps:
+  #   # Checkout the repository to the GitHub Actions runner
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
 
-    - name: setting up node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 13.8.0
+  #   - name: setting up node
+  #     uses: actions/setup-node@v3
+  #     with:
+  #       node-version: 13.8.0
         
 
-    - name: linting backend
-      working-directory: ./backend
-      run: |
-          npm install
-          npm run lint
+  #   - name: linting backend
+  #     working-directory: ./backend
+  #     run: |
+  #         npm install
+  #         npm run lint
 
-    - name: linting frontend
-      working-directory: ./frontend
-      run: |
-          npm install  
-          npm run lint
+  #   - name: linting frontend
+  #     working-directory: ./frontend
+  #     run: |
+  #         npm install  
+  #         npm run lint
 
     
-    - name: testing backend
-      working-directory: ./backend
-      run: |
-          npm run test
+  #   - name: testing backend
+  #     working-directory: ./backend
+  #     run: |
+  #         npm run test
         
     
-    - name: testing frontend
-      working-directory: ./frontend
-      run: |
-          npm run test
+  #   - name: testing frontend
+  #     working-directory: ./frontend
+  #     run: |
+  #         npm run test
 
-    - name: formatting frontend
-      working-directory: ./frontend
-      run: |
-          npm run format
+  #   - name: formatting frontend
+  #     working-directory: ./frontend
+  #     run: |
+  #         npm run format
     
   
-    - name: format backend
-      working-directory: ./backend
-      run: |
-          npm run format
+  #   - name: format backend
+  #     working-directory: ./backend
+  #     run: |
+  #         npm run format
     
-    # setting up for virtualization
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
+  #   # setting up for virtualization
+  #   - name: Set up QEMU
+  #     uses: docker/setup-qemu-action@v2
     
-    # setting up docker
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+  #   # setting up docker
+  #   - name: Set up Docker Buildx
+  #     uses: docker/setup-buildx-action@v2
     
-    # login to dockerhub
-    - name: Login to DockerHub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #   # login to dockerhub
+  #   - name: Login to DockerHub
+  #     uses: docker/login-action@v2
+  #     with:
+  #       username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #       password: ${{ secrets.DOCKERHUB_TOKEN }}
     
-    # building docker container frontend
-    - name: Build Docker Image frontend
-      working-directory: ./frontend
-      run:
-        docker build --tag $DOCKER_REPOSITORY/$FRONTEND_IMAGE_NAME:$IMAGE_TAG --no-cache .
+  #   # building docker container frontend
+  #   - name: Build Docker Image frontend
+  #     working-directory: ./frontend
+  #     run:
+  #       docker build --tag $DOCKER_REPOSITORY/$FRONTEND_IMAGE_NAME:$IMAGE_TAG --no-cache .
      
-     # building docker container backend 
-    - name: Build Docker Image migrations
-      working-directory: ./backend
-      run:
-        docker build --tag $DOCKER_REPOSITORY/$MIGRATIONS_IMAGE_NAME:$IMAGE_TAG -f Dockerfile_migrations --no-cache .
+  #    # building docker container backend 
+  #   - name: Build Docker Image migrations
+  #     working-directory: ./backend
+  #     run:
+  #       docker build --tag $DOCKER_REPOSITORY/$MIGRATIONS_IMAGE_NAME:$IMAGE_TAG -f Dockerfile_migrations --no-cache .
       
-     # building docker container backend 
-    - name: Build Docker Image backend
-      working-directory: ./backend
-      run:
-        docker build --tag $DOCKER_REPOSITORY/$BACKEND_IMAGE_NAME:$IMAGE_TAG --no-cache .
+  #    # building docker container backend 
+  #   - name: Build Docker Image backend
+  #     working-directory: ./backend
+  #     run:
+  #       docker build --tag $DOCKER_REPOSITORY/$BACKEND_IMAGE_NAME:$IMAGE_TAG --no-cache .
   
-  # scanning docker container 
-    - name: Run Trivy vulnerability scanner frontend
-      uses: aquasecurity/trivy-action@master
-      continue-on-error: true # should be false in a real prod environment for the pipeline to fail and alert developers team of any security issue
-      with:
-        image-ref: 'docker.io/$DOCKER_REPOSITORY/$FRONTEND_IMAGE_NAME:$IMAGE_TAG'
-        format: 'table'
-        exit-code: '1'
-        ignore-unfixed: true
-        vuln-type: 'os'
-        severity: 'MEDIUM,HIGH,CRITICAL'
+  # # scanning docker container 
+  #   - name: Run Trivy vulnerability scanner frontend
+  #     uses: aquasecurity/trivy-action@master
+  #     continue-on-error: true # should be false in a real prod environment for the pipeline to fail and alert developers team of any security issue
+  #     with:
+  #       image-ref: 'docker.io/$DOCKER_REPOSITORY/$FRONTEND_IMAGE_NAME:$IMAGE_TAG'
+  #       format: 'table'
+  #       exit-code: '1'
+  #       ignore-unfixed: true
+  #       vuln-type: 'os'
+  #       severity: 'MEDIUM,HIGH,CRITICAL'
 
-  # scanning docker container 
-    - name: Run Trivy vulnerability scanner backend
-      uses: aquasecurity/trivy-action@master
-      continue-on-error: true # should be false in a real prod environment for the pipeline to fail and alert developers team of any security issue
-      with:
-        image-ref: 'docker.io/$DOCKER_REPOSITORY/$BACKEND_IMAGE_NAME:$env.IMAGE_TAG'
-        format: 'table'
-        exit-code: '1'
-        ignore-unfixed: true
-        vuln-type: 'os'
-        severity: 'MEDIUM,HIGH,CRITICAL'
+  # # scanning docker container 
+  #   - name: Run Trivy vulnerability scanner backend
+  #     uses: aquasecurity/trivy-action@master
+  #     continue-on-error: true # should be false in a real prod environment for the pipeline to fail and alert developers team of any security issue
+  #     with:
+  #       image-ref: 'docker.io/$DOCKER_REPOSITORY/$BACKEND_IMAGE_NAME:$env.IMAGE_TAG'
+  #       format: 'table'
+  #       exit-code: '1'
+  #       ignore-unfixed: true
+  #       vuln-type: 'os'
+  #       severity: 'MEDIUM,HIGH,CRITICAL'
     
-    - name: Push Image to Docker Hub
-      run: |
-        docker push $DOCKER_REPOSITORY/$BACKEND_IMAGE_NAME:$IMAGE_TAG
-        docker push $DOCKER_REPOSITORY/$FRONTEND_IMAGE_NAME:$IMAGE_TAG
-        docker push $DOCKER_REPOSITORY/$MIGRATIONS_IMAGE_NAME:$IMAGE_TAG
+  #   - name: Push Image to Docker Hub
+  #     run: |
+  #       docker push $DOCKER_REPOSITORY/$BACKEND_IMAGE_NAME:$IMAGE_TAG
+  #       docker push $DOCKER_REPOSITORY/$FRONTEND_IMAGE_NAME:$IMAGE_TAG
+  #       docker push $DOCKER_REPOSITORY/$MIGRATIONS_IMAGE_NAME:$IMAGE_TAG
   
 #deploying to staging for the qa team
 
   deploy-staging:
     name: 'deploy-staging'
-    needs: [lint-test-build]
+    # needs: [lint-test-build]
     uses: Bash-mocart/workflow/.github/workflows/deploy.yml@main #uses a resuable job at https://https://raw.githubusercontent.com/Bash-mocart/workflow/main/.github/workflows/deploy.yml
     with: 
       environment: staging
       env_dir: ./staging 
       helm_dir: ./helm
-      IMAGE_TAG: ${{ github.run_number }}
+      IMAGE_TAG: 236
       CLUSTER_NAME: eks
       DOCKER_REPOSITORY: bashox
       FRONTEND_IMAGE_NAME: revolgy-frontend
