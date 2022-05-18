@@ -16,11 +16,11 @@ terraform {
     organization = "revolgy-infra"
     #
     #         # The name of the Terraform Cloud workspace to store Terraform state files in.
-    workspaces { 
+    workspaces {
       name = "production"
     }
-  }  
-} 
+  }
+}
 
 module "eks" {
   source                  = "../terraform/module/eks/"
