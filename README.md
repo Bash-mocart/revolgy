@@ -49,8 +49,29 @@
 ![infra_chart](./infra.png?raw=true "Title")  
 
 
+## Logs in display
+![logs](./backendlogd.png?raw=true "Title") 
+![logs](./frontendlogs.png?raw=true "Title") 
+![logs](./frontendlogss.png?raw=true "Title") 
+
+# Grafana in display
+![logs](./grafana.png?raw=true "Title") 
+![logs](./grafanaback.png?raw=true "Title") 
+
+# Frontend interracting with the Backend and Backend interracting with Postgres Instance :)
+![logs](./backend.png?raw=true "Title") 
+![logs](./new.png?raw=true "Title")
+![logs](./revolgy.png?raw=true "Title")  
+
+# Finally LoadBalancers :)
+![logs](./loadbalancer.png?raw=true "Title") 
+
+
 ## Steps to evaluate the CI/CD
 
 1. Go to the actions tab and see the results with the jobs ran
 
 2. Check the logs for the test results
+
+## Chuck Norris Approval
+![logs](./chuck-norris-approves.gif?raw=true "Title") 
