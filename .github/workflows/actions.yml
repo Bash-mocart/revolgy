@@ -272,7 +272,7 @@ jobs:
 #deploying to production after merging to master branch and when all checks have succeed
   deploy-prod:
     name: 'deploy-prod'
-    needs: [deploy-staging]
+    needs: [lint-test-build]
     # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
     uses: Bash-mocart/workflow/.github/workflows/deploy.yml@main
