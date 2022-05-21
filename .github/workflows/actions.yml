@@ -220,7 +220,7 @@ jobs:
       uses: aquasecurity/trivy-action@master
       continue-on-error: true # should be false in a real prod environment for the pipeline to fail and alert developers team of any security issue
       with:
-        image-ref: 'docker.io/$DOCKER_REPOSITORY/$BACKEND_IMAGE_NAME:$env.IMAGE_TAG'
+        image-ref: 'docker.io/$DOCKER_REPOSITORY/$BACKEND_IMAGE_NAME:$IMAGE_TAG'
         format: 'table'
         exit-code: '1'
         ignore-unfixed: true
@@ -235,37 +235,37 @@ jobs:
   
 #deploying to staging for the qa team
 
-  deploy-staging:
-    name: 'deploy-staging'
-    needs: [lint-test-build]
-    uses: Bash-mocart/workflow/.github/workflows/deploy.yml@main #uses a resuable job at https://https://raw.githubusercontent.com/Bash-mocart/workflow/main/.github/workflows/deploy.yml
-    with: 
-      environment: staging
-      env_dir: ./staging 
-      helm_dir: ./helm
-      IMAGE_TAG: ${{ github.run_number }}
-      CLUSTER_NAME: eks
-      DOCKER_REPOSITORY: bashox
-      FRONTEND_IMAGE_NAME: revolgy-frontend
-      BACKEND_IMAGE_NAME: revolgy-backend
-      MIGRATIONS_IMAGE_NAME: revolgy-migrations
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: ${{ secrets.AWS_REGION}}
-      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-      ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
-      GRAFANA_PASS: ${{ secrets.GRAFANA_PASS }}
-      TYPEORM_CONNECTION: ${{ secrets.TYPEORM_CONNECTION }}
-      TYPEORM_MIGRATIONS_DIR: ${{ secrets.TYPEORM_MIGRATIONS_DIR }}
-      TYPEORM_MIGRATIONS: ${{ secrets.TYPEORM_MIGRATIONS }}
-      TYPEORM_PORT: ${{ secrets.TYPEORM_PORT }}
-      TYPEORM_PASSWORD: ${{ secrets.TYPEORM_PASSWORD }}
-      TYPEORM_USERNAME: ${{ secrets.TYPEORM_USERNAME }}
-      TYPEORM_DATABASE: ${{ secrets.TYPEORM_DATABASE }} 
-      TYPEORM_MIGRATIONS_DIR_P: ${{  secrets.TYPEORM_MIGRATIONS_DIR_P }}
-      TYPEORM_MIGRATIONS_P: ${{ secrets.TYPEORM_MIGRATIONS_P }}
-      TYPEORM_MIGRATIONS_ENTITIES_P: ${{ secrets.TYPEORM_MIGRATIONS_ENTITIES_P }}
+  # deploy-staging:
+  #   name: 'deploy-staging'
+  #   needs: [lint-test-build]
+  #   uses: Bash-mocart/workflow/.github/workflows/deploy.yml@main #uses a resuable job at https://https://raw.githubusercontent.com/Bash-mocart/workflow/main/.github/workflows/deploy.yml
+  #   with: 
+  #     environment: staging
+  #     env_dir: ./staging 
+  #     helm_dir: ./helm
+  #     IMAGE_TAG: ${{ github.run_number }}
+  #     CLUSTER_NAME: eks
+  #     DOCKER_REPOSITORY: bashox
+  #     FRONTEND_IMAGE_NAME: revolgy-frontend
+  #     BACKEND_IMAGE_NAME: revolgy-backend
+  #     MIGRATIONS_IMAGE_NAME: revolgy-migrations
+  #   secrets:
+  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     AWS_REGION: ${{ secrets.AWS_REGION}}
+  #     TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+  #     ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+  #     GRAFANA_PASS: ${{ secrets.GRAFANA_PASS }}
+  #     TYPEORM_CONNECTION: ${{ secrets.TYPEORM_CONNECTION }}
+  #     TYPEORM_MIGRATIONS_DIR: ${{ secrets.TYPEORM_MIGRATIONS_DIR }}
+  #     TYPEORM_MIGRATIONS: ${{ secrets.TYPEORM_MIGRATIONS }}
+  #     TYPEORM_PORT: ${{ secrets.TYPEORM_PORT }}
+  #     TYPEORM_PASSWORD: ${{ secrets.TYPEORM_PASSWORD }}
+  #     TYPEORM_USERNAME: ${{ secrets.TYPEORM_USERNAME }}
+  #     TYPEORM_DATABASE: ${{ secrets.TYPEORM_DATABASE }} 
+  #     TYPEORM_MIGRATIONS_DIR_P: ${{  secrets.TYPEORM_MIGRATIONS_DIR_P }}
+  #     TYPEORM_MIGRATIONS_P: ${{ secrets.TYPEORM_MIGRATIONS_P }}
+  #     TYPEORM_MIGRATIONS_ENTITIES_P: ${{ secrets.TYPEORM_MIGRATIONS_ENTITIES_P }}
 
 
 
@@ -273,7 +273,7 @@ jobs:
   deploy-prod:
     name: 'deploy-prod'
     needs: [deploy-staging]
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
     uses: Bash-mocart/workflow/.github/workflows/deploy.yml@main
     with:  
