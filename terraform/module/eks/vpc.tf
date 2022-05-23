@@ -2,7 +2,7 @@
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc
 
 resource "aws_vpc" "main" {
-  # The CIDR block for the VPC.
+  # The CIDR block for VPC.
   cidr_block = var.vpc-cidr
 
   # Makes your instances shared on the host.

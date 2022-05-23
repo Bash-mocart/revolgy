@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrations
+  annotations:
+    # This is what defines this resource as a hook
+    "helm.sh/hook": pre-install,pre-upgrade
+spec:
+  ttlSecondsAfterFinished: 200
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        app: migrations
+    spec:
+      containers:
+      - name: migrations
+        image: {{ .Values.migrations.containerImage }}
+        imagePullPolicy: IfNotPresent
+        command: ["npm","run", "migrations"]
+        env:
+          - name: TYPEORM_CONNECTION
+            value: {{ .Values.backend.container.TYPEORM_CONNECTION | quote }}
+          - name: TYPEORM_MIGRATIONS_DIR
+            value: {{ .Values.migrations.container.TYPEORM_MIGRATIONS_DIR | quote }}
+          - name: TYPEORM_ENTITIES
+            value: {{ .Values.migrations.container.TYPEORM_ENTITIES | quote }}
+          - name: TYPEORM_MIGRATIONS
+            value: {{ .Values.migrations.container.TYPEORM_MIGRATIONS | quote }}
+          - name: TYPEORM_HOST
+            value: {{ .Values.migrations.container.TYPEORM_HOST | quote }}
+          - name: TYPEORM_PORT
+            value: {{ .Values.backend.container.TYPEORM_PORT | quote }}
+          - name: TYPEORM_USERNAME
+            value: {{ .Values.backend.container.TYPEORM_USERNAME | quote }}
+          - name: TYPEORM_PASSWORD
+            value: {{ .Values.backend.container.TYPEORM_PASSWORD | quote }}
+          - name: TYPEORM_DATABASE
+            value: {{ .Values.backend.container.TYPEORM_DATABASE | quote }}
+        
+      restartPolicy: Never

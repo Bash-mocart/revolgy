@@ -40,6 +40,9 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+.github/workflows/deploy.yml
+
 # Whitelist some files
 !/backend/*
 !/frontend/*
+!/terraform/module/eks/*.json

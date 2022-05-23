@@ -18,6 +18,13 @@ variable "pub-subnet-cidr-b" {
     type = string
 }
 
+variable "az-a" {
+    type = string
+}
+
+variable "az-b" {
+    type = string
+}
 
 variable "pri-subnet-cidr-a" {
     default = "192.168.128.0/18"
@@ -58,15 +65,13 @@ variable "db_password" {
   sensitive   = true
 }
 
-
-variable "az-a" {
-    type = string
+variable "eks_node_group_iam_role" {
+  type = string
 }
 
-variable "az-b" {
-    type = string
+variable "eks_cluster_role" {
+  type = string
 }
-
 
 
 
